@@ -9,7 +9,7 @@ export default function Navbar() {
             History Exercise
           </a>
           <a href="#" className="hover:opacity-80">
-            Hometaeee
+            Hometaeeeeee
           </a>
           <img
             src={profileImage}

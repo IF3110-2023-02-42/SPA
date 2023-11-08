@@ -6,12 +6,11 @@ export default defineConfig({
   base: "/",
   plugins: [react()],
   server: {
-    port: 8090,  // Default Vite dev server port
+    port: 8090,
     strictPort: true,
     host: true,  // Allow connections from any host
-    open: true,  // Automatically open a browser window
-    hmr: {
-      clientPort: 9026,
+    watch: {
+      usePolling: true,
     }
   }
 })
