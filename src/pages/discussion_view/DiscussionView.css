@@ -1,0 +1,140 @@
+main body{
+    height:100%;
+    align-items: center;
+    padding: 1% 2.5% 5% 2.5%;
+    background-color: #fdf8ee;
+    position: relative;
+}
+
+body .content{
+    width: 90%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+    margin-bottom: 2%;
+    border-radius: 15px;
+    padding: 2%;
+    color: #4D2C5E;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+body button{
+    background-color: #4D2C5E;
+    margin-bottom: 2%;
+    margin-right: 3%;
+    padding-bottom:0.5%;
+    padding-top:0.5%;
+    padding-right:3%;
+    padding-left:3%;
+    border-radius: 15px;
+    border: none;
+    flex-direction: row;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+body button:hover{
+    scale: 120%;
+}
+
+body button:active{
+    background-color: #30123f;
+}
+
+body .replySection{
+    text-align: center;
+}
+
+body h1{
+    color: #4D2C5E;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+body h2{
+    color: #4D2C5E;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+body h3{
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+body h4{
+    color: #4D2C5E;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.content p{
+    font-size: 1.2rem;
+}
+
+.replySection .reply{
+    width: 90%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 5%;
+    margin-bottom: 1%;
+    border-radius: 15px;
+    padding: 1%;
+    color: #4D2C5E;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.replySection .commentInput{
+    width: 90%;
+    background-color: white;
+    /* display: none; */
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 5%;
+    margin-bottom: 1%;
+    border-radius: 15px;
+    padding: 1%;
+    color: #4D2C5E;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.replySection input{
+    border-color: #4D2C5E;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    word-wrap: normal;
+}
+
+.replySection button{
+    background-color: #4D2C5E;
+    align-self:flex-end;
+    max-width: fit-content;
+    margin-bottom: 1%;
+    margin-right: 2%;
+    padding-bottom:0.5%;
+    padding-top:0.5%;
+    padding-right:3%;
+    padding-left:3%;
+    border-radius: 15px;
+    border: none;
+    flex-direction: row;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.replySection button:hover{
+    scale: 120%;
+}
+
+.replySection button:active{
+    background-color: #30123f;
+}
+
+.replySection h3{
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
