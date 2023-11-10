@@ -1,5 +1,5 @@
 import Navbar from "../../components/Navbar";
-import balasanIcon from "../../assets/profile.jpg";
+// import balasanIcon from "../../assets/profile.jpg";
 import { FaPlus, FaComment} from 'react-icons/fa';
 
 const Home = () => {
