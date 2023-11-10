@@ -1,16 +1,15 @@
 version: "3.8"
 services:
   studydojo-premium:
-    container_name: studydojo-spa
-    build: 
+    container_name: studydojo-premium
+    build:
       context: .
       dockerfile: Dockerfile
+    image: studydojo-premium:latest
     ports:
-      - '5174:5174'
-    volumes:
-      - '.:/app'
-      - '/app/node_modules'
-    stdin_open: true
-    tty: true
+      - "8090:8090"
     environment:
       - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public

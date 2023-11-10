@@ -5,6 +5,8 @@ export default {
     extend: {
       colors: {
         darkBg: "#000000",
+        purpleBg: "#4D2C5E",
+        creamBg: "#FDF8EE",
       },
     },
   },
