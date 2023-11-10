@@ -13,7 +13,13 @@ const comments = [
 
 const commentElements = comments.map((el, index) => (
   <div className="reply" key={index}>
-    <h4>{el.username}</h4>
+    <div className="user">
+      <div className="profile"></div>
+      <div className="profilecontent">
+        <div className="name">{el.username}</div>
+        <div className="time">dd/mm/yyy hh:mm</div>
+      </div>
+    </div>
     <p>{el.comment}</p>
   </div>
 ));
@@ -24,6 +30,13 @@ const commentElements = comments.map((el, index) => (
       <body>
         <h1>Discussion</h1>
         <div className="content">
+          <div className="user">
+            <div className="profile"></div>
+            <div className="profilecontent">
+              <div className="name">username</div>
+              <div className="time">dd/mm/yyy hh:mm</div>
+            </div>
+          </div>
           <h2>Title</h2>
           <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.
           Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus. <br></br> <br></br>

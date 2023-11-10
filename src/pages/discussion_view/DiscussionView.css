@@ -19,6 +19,34 @@ body .content{
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
+.content .user{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 3%;
+    margin-right: 2%;
+}
+
+.user .profile{
+    height: 40px;
+    width: 40px;
+    background-color: #888888;
+    border-radius: 50%;
+    margin-right: 2%;
+}
+
+.user .profilecontent{
+    display: flex;
+    flex-direction: column;
+}
+
+.profilecontent .name{
+    font-size: 1rem;
+}
+
+.profilecontent .time{
+    font-size: 0.7rem;
+}
+
 body button{
     background-color: #4D2C5E;
     margin-bottom: 2%;
@@ -85,6 +113,48 @@ body h4{
     padding: 1%;
     color: #4D2C5E;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.reply .replycontent{
+    width: 90%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 5%;
+    margin-bottom: 1%;
+    border-radius: 15px;
+    padding: 1%;
+    color: #4D2C5E;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.reply .user{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1%;
+    margin-right: 2%;
+}
+
+.user .profile{
+    height: 40px;
+    width: 40px;
+    background-color: #888888;
+    border-radius: 50%;
+    margin-right: 2%;
+}
+
+.user .profilecontent{
+    display: flex;
+    flex-direction: column;
+}
+
+.profilecontent .name{
+    font-size: 1rem;
+}
+
+.profilecontent .time{
+    font-size: 0.7rem;
 }
 
 .replySection .commentInput{
