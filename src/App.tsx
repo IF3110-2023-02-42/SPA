@@ -6,7 +6,7 @@ import {
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
-import DiscussionView from './pages/discussion_view/DiscussionView';
+import DiscussionView from './pages/discussion/DiscussionView';
 
 const router = createBrowserRouter([
   {
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     element: <Register />
   },
   {
-    path: "/discussion_view",
+    path: "/discussion",
     element: <DiscussionView />,
   }
 ]) 
