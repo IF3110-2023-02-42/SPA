@@ -42,9 +42,15 @@ const commentElements = comments.map((el, index) => (
           Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus. <br></br> <br></br>
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci. Aenean nec lorem. In porttitor. Donec laoreet nonummy augue???
           </p>
+          <div className="voteContainer">
+            <button className="upvoteButton">∧</button>
+            <p>xx</p>
+            <button className="downvoteButton">∨</button>
+            <p>xx</p>
+          </div>
         </div>
+
         <div className="replySection">
-        
           <div className="commentInput">
             <h2>Add Reply</h2>
             <input
