@@ -1,11 +1,12 @@
 import Navbar from "../../components/Navbar";
-// import balasanIcon from "../../assets/profile.jpg";
+import AddDiscussion from "../discussion/AddNewDiscussion";
 import { FaPlus, FaComment} from 'react-icons/fa';
 
 const Home = () => {
   return (
-    <div className="bg-creamBg z-1 min-h-screen">
+    <div className="bg-creamBg z-10 min-h-screen">
       <Navbar />
+      <AddDiscussion/>
       <div className="  mx-auto px-2 sm:px-6 lg:px-8  relative">
         <div className="w-full relative flex flex-col items-center justify-center py-5">
           <h1 className="text-4xl font-bold">Diskusi</h1>
@@ -29,7 +30,7 @@ const Home = () => {
 
           </div>
         </div>
-        <div className="fixed w-full py-10 pr-20 flex justify-end bottom-0">
+        <div className="fixed w-full py-10 pr-20 flex justify-end bottom-0 z-20">
           <FaPlus className="text-creamBg shadow-md bg-purpleBg opacity-100 transition duration-300 ease-in-out hover:scale-105 hover:cursor-pointer mr-2 p-1.5 rounded-full"  size={70}/>
         </div>
       </div>
