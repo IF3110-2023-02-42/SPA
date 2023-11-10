@@ -3,6 +3,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import DiscussionView from "./pages/discussion/DiscussionView";
+import Exercise from "./pages/exercise/Exercise";
 
 export const router = () =>
   createBrowserRouter([
@@ -25,6 +26,10 @@ export const router = () =>
         {
           path: "/discussion_view",
           element: <DiscussionView />,
+        },
+        {
+          path: "/exercise",
+          element: <Exercise />,
         },
       ],
     },
