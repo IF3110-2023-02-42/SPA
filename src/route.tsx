@@ -29,7 +29,7 @@ export const router = () =>
           element: <Verification />,
         },
         {
-          path: "/discussion_view",
+          path: "/discussion_view/:id",
           element: <DiscussionView />,
         },
         {
