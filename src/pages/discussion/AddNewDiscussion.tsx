@@ -2,7 +2,7 @@ import { useState, ChangeEvent } from 'react';
 import { IoMdClose } from 'react-icons/io';
 
 export interface Discussion{
-    id: number,
+    key: number,
     judul : string,
     dateCreated: number,
     author: string,
@@ -38,19 +38,52 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
         }
       };
     
-    const submitNewDiscussion = (judul : string,  contentSnippet : string, keywords : string)=>{
+    const submitNewDiscussion = async (judul : string,  contentSnippet : string, keywords : string)=>{
         // Get another data
-        let id = 12; // Mungkin bakalan pake UUID or something like that, harus bikin konsisten juga dari sana
         let dateCreated = 0; // Karena pada hari yang sama dengan saat diskusi dibuat
         let author = 'Fadhil'; // Ambil dari session nanti
         let numOfComment = 0;
-
         // Add new discussion to REST
-        let keywordsParsed : string[] = keywords.split(','); // Nanti udh retrieve dari REST
+        const response = await fetch("http://localhost:3000/discussion/add", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                judul: judul,
+                dateCreated: new Date(),
+                author: author,
+                contentSnippet: contentSnippet, // Catatan: numOfComment dihitung setiap dilakukan get
+                keywords: keywords,
+                numOfComment: numOfComment                
+            })
+        });
 
-        let newDiscussion: Discussion = {id:id, judul:judul, dateCreated:dateCreated, author:author, contentSnippet:contentSnippet, numOfComment:numOfComment, keywords:keywordsParsed};
-        addDiscussion(newDiscussion);
-        toggleModal();
+        const data = await response.json();
+
+        if (response.ok){
+            console.log("add Discussion Success");
+            // Mungkin nambahin modal
+
+            // responsenya juga ngirimin balik data tadi
+            
+            let keywordsParsed : string[] = keywords.split(','); // Nanti udh retrieve dari REST
+    
+            let newDiscussion: Discussion = {
+                key:data.data.id, 
+                judul:judul, 
+                dateCreated:dateCreated, 
+                author:author, 
+                contentSnippet:(contentSnippet.length > 300) ? (contentSnippet.slice(0,297)+"..."):contentSnippet, 
+                numOfComment:numOfComment,
+                keywords:keywordsParsed
+            };
+            addDiscussion(newDiscussion);
+            toggleModal();
+        } else {
+            console.log("add Discussion Failed");
+            // Mungkin nambahin modal
+        }
     }
     
 
