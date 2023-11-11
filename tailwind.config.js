@@ -8,6 +8,10 @@ export default {
         purpleBg: "#4D2C5E",
         creamBg: "#FDF8EE",
       },
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
+      },
     },
   },
   plugins: [],
