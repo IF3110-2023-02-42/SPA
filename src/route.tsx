@@ -23,7 +23,7 @@ export const router = () =>
           element: <Register />,
         },
         {
-          path: "/discussion_view",
+          path: "/discussion_view/:id",
           element: <DiscussionView />,
         },
       ],
