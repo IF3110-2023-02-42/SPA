@@ -2,39 +2,41 @@ import Navbar from "../../components/Navbar";
 import AddNewDiscussion from "../discussion/AddNewDiscussion";
 import { Discussion } from "../discussion/AddNewDiscussion";
 import { FaPlus, FaComment} from 'react-icons/fa';
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
 
 
 
-function getDiscussionsData() : Discussion[]{
-  
-  // Nantinya bakal req ke REST
-  
-  let discussions : Discussion[] =[ {
-    id: 1,
-    judul : "Economic Bubble",
-    dateCreated: 2,
-    author: "Fadhil",
-    contentSnippet: "Apa itu Economic Bubble?",
-    numOfComment: 7,
-    keywords: ["Economic", "Bubble"],
-  }, {
-    id: 1,
-    judul : "Economic Bubble",
-    dateCreated: 2,
-    author: "Fadhil",
-    contentSnippet: "Apa itu Economic Bubble?",
-    numOfComment: 7,
-    keywords: ["Economic", "Bubble"],
-  }]
-
-  return discussions;
-}
 
 const Home = () => {
   const [modal, setModal] = useState(false);
-  const [discussionCards, setDiscussionCards] = useState(getDiscussionsData())
+  const [discussionCards, setDiscussionCards] = useState<Discussion[]>([])
+  
+  function getDiscussionsData(){
+    
+    // Get Discussion Data to REST webservice
+    fetch("http://localhost:3000/discussion", {
+      method:"GET",
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then((res) => {
+      if (res.ok){
+        return res.json();
+      } else {
+        throw new Error("Failed to fetch discussion data");
+      }
+    }).then(data=>{
+      console.log(data.data)
+      setDiscussionCards(data.data);
+    }).catch(err => console.log(err));
+  }
+
+  useEffect(()=>{
+    getDiscussionsData()
+  }, [])
+
   const toggleModal = () => {
     setModal(!modal);
     console.log(modal);
@@ -44,9 +46,9 @@ const Home = () => {
     setDiscussionCards((prevDiscussions)=> [...prevDiscussions, newDiscussion])
   }
   
-  function DiscussionCard({id, judul, dateCreated, author, contentSnippet, numOfComment, keywords}:Discussion){
+  function DiscussionCard({key, judul, dateCreated, author, contentSnippet, numOfComment, keywords}:Discussion){
       function handleDiscussionCardClick(){
-        navigate(`/discussion_view/${id}`)
+        navigate(`/discussion_view/${key}`)
       }
     
       return <div className="w-3/5 mt-5 p-5 shadow-md rounded-3xl transition duration-300 ease-in-out hover:cursor-pointer hover:bg-gray-100 bg-white"
@@ -59,9 +61,9 @@ const Home = () => {
           </div>
           <p>By {author}</p>
         </div>
-        <div className="pb-3">
-          {contentSnippet}
-        </div>
+        <p className="pb-3 w-full overflow-hidden text-overflow-ellipsis whitespace-normal">
+          {(contentSnippet.length > 300) ? (contentSnippet.slice(0,297)+"...") : contentSnippet}
+        </p>
         <div className="flex space-x-3 items-center pb-3">
           {keywords.map((keyword)=> (
             <p key={keyword} className="flex items-center justify-center hover:opacity-90 bg-gray-400 px-1 rounded-md" >#{keyword}</p>
@@ -83,7 +85,7 @@ const Home = () => {
           <div className="w-full pb-5 flex flex-col items-center"> 
           {discussionCards.map((discussion) => (
               <DiscussionCard
-                id={discussion.id}
+                key={discussion.key}
                 judul={discussion.judul}
                 dateCreated={discussion.dateCreated}
                 author={discussion.author}
