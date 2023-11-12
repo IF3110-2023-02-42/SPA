@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from "../../utils/api";
 
 import CardHistoryExercise from "../../components/CardHistoryExercise";
 import NavbarLayout from "../../layout/NavbarLayout";
@@ -7,40 +8,8 @@ type CardHistoryExerciseProps = {
   judul: string;
   ID_Latsol: string;
   Nilai: number;
-  Modified_at: Date;
+  Modified_at: string;
 };
-
-// dummy data
-const cardExerciseDum1: CardHistoryExerciseProps = {
-  judul: "Mengalahkan Natzi",
-  ID_Latsol: "123123123",
-  Nilai: 69,
-  Modified_at: new Date(),
-};
-
-const cardExerciseDum2: CardHistoryExerciseProps = {
-  judul: "Mendapatkan Waifu Natzi",
-  ID_Latsol: "696996",
-  Nilai: 12,
-  Modified_at: new Date(),
-};
-
-const cardExerciseDum3: CardHistoryExerciseProps = {
-  judul: "Mendapatkan Husbando Natzi",
-  ID_Latsol: "7777",
-  Nilai: 99,
-  Modified_at: new Date(),
-};
-
-const dummyExerciseList: CardHistoryExerciseProps[] = [
-  cardExerciseDum1,
-  cardExerciseDum2,
-  cardExerciseDum3,
-  cardExerciseDum1,
-  cardExerciseDum2,
-  cardExerciseDum3,
-];
-// dummy data
 
 const ExHistoryList = () => {
   const [exerciseList, setExerciseList] = useState<
@@ -48,25 +17,35 @@ const ExHistoryList = () => {
   >(null);
 
   useEffect(() => {
-    // change later
-    setExerciseList(dummyExerciseList);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/exercise/test");
 
-  if (exerciseList === null) {
-    return (
-      <NavbarLayout>
-        <div>not found</div>
-      </NavbarLayout>
-    );
-  }
+        console.log("Data:", response.data.data);
+        setExerciseList(response.data.data);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+        setExerciseList(null);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <NavbarLayout>
       <div className="flex flex-col w-full justify-center items-center p-2 sm:p-10">
         <div className="flex flex-col w-full justify-center items-center gap-3">
-          {exerciseList.map((exerciseCard) => (
-            <CardHistoryExercise {...exerciseCard} />
-          ))}
+          {exerciseList ? (
+            exerciseList.map((exerciseCard) => (
+              <CardHistoryExercise
+                {...exerciseCard}
+                key={exerciseCard.ID_Latsol}
+              />
+            ))
+          ) : (
+            <div>not found</div>
+          )}
         </div>
       </div>
     </NavbarLayout>
