@@ -4,33 +4,22 @@ import { Discussion } from "../discussion/AddNewDiscussion";
 import { FaPlus, FaComment} from 'react-icons/fa';
 import { useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
-
-
-
+import api from "../../utils/api";
 
 const Home = () => {
   const [modal, setModal] = useState(false);
   const [discussionCards, setDiscussionCards] = useState<Discussion[]>([])
   
-  function getDiscussionsData(){
+  async function getDiscussionsData(){
     
     // Get Discussion Data to REST webservice
-    fetch("http://localhost:3000/discussion", {
-      method:"GET",
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    .then((res) => {
-      if (res.ok){
-        return res.json();
-      } else {
-        throw new Error("Failed to fetch discussion data");
-      }
-    }).then(data=>{
-      console.log(data.data)
-      setDiscussionCards(data.data);
-    }).catch(err => console.log(err));
+    const response = await api.get("/discussion");
+    if (response.data.message=="OK"){
+      console.log(response.data.data)
+      setDiscussionCards(response.data.data);
+    } else{
+      console.log("Failed to fetch discussion data");
+    }
   }
 
   useEffect(()=>{
@@ -41,14 +30,16 @@ const Home = () => {
     setModal(!modal);
     console.log(modal);
   };
+
   const navigate = useNavigate()
   function addDiscussion(newDiscussion:Discussion){
     setDiscussionCards((prevDiscussions)=> [...prevDiscussions, newDiscussion])
   }
   
-  function DiscussionCard({key, judul, dateCreated, author, contentSnippet, numOfComment, keywords}:Discussion){
+  // Discussion Card Component
+  function DiscussionCard({id, judul, dateCreated, author, content, numOfComment, keywords}:Discussion){
       function handleDiscussionCardClick(){
-        navigate(`/discussion_view/${key}`)
+        navigate(`/discussion_view/${id}`)
       }
     
       return <div className="w-3/5 mt-5 p-5 shadow-md rounded-3xl transition duration-300 ease-in-out hover:cursor-pointer hover:bg-gray-100 bg-white"
@@ -62,7 +53,7 @@ const Home = () => {
           <p>By {author}</p>
         </div>
         <p className="pb-3 w-full overflow-hidden text-overflow-ellipsis whitespace-normal">
-          {(contentSnippet.length > 300) ? (contentSnippet.slice(0,297)+"...") : contentSnippet}
+          {(content.length > 300) ? (content.slice(0,297)+"...") : content}
         </p>
         <div className="flex space-x-3 items-center pb-3">
           {keywords.map((keyword)=> (
@@ -75,6 +66,7 @@ const Home = () => {
         </div>
     </div>
   }
+  // Home Page
   return (
     <div className="bg-creamBg z-10 min-h-screen">
       <Navbar />
@@ -85,11 +77,12 @@ const Home = () => {
           <div className="w-full pb-5 flex flex-col items-center"> 
           {discussionCards.map((discussion) => (
               <DiscussionCard
-                key={discussion.key}
+                key={discussion.id}
+                id={discussion.id}
                 judul={discussion.judul}
                 dateCreated={discussion.dateCreated}
                 author={discussion.author}
-                contentSnippet={discussion.contentSnippet}
+                content={discussion.content}
                 numOfComment={discussion.numOfComment}
                 keywords={discussion.keywords}
               />
