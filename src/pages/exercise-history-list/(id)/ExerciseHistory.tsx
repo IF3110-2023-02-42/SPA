@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import NavbarLayout from "../../../layout/NavbarLayout";
 import CardQuestionAnswered from "../../../components/CardQuestionAnswered";
+import api from "../../../utils/api";
 
 type CardQuestionAnsweredProps = {
+  ID_Soal: string;
   pertanyaan: string;
   jawaban: string; // ini jawaban pengguna
   jawaban_benar: string;
@@ -15,56 +17,9 @@ type CardQuestionAnsweredProps = {
 type ExerciseHistoryData = {
   judul: string;
   Nilai: number;
-  Modified_at: Date;
+  Modified_at: string;
   pembahasan: CardQuestionAnsweredProps[];
 };
-
-// dummy data
-const soalJawabanBener1: CardQuestionAnsweredProps = {
-  pertanyaan:
-    "Sosiologi lahir sebagai ilmu yang mempelajari tentang masyarakat. Istilah sosiologi berasal dari bahasa Yunani socius yang berarti kawan dan logos yang artinya",
-  jawaban: "Hubungan sosial",
-  jawaban_benar: "Hubungan sosial",
-  jawaban_salah1: "Ilmu atau pikiran",
-  jawaban_salah2: "Kehidupan bersama",
-  jawaban_salah3: "Hubungan antar kelompok",
-};
-
-const soalJawabanBener2: CardQuestionAnsweredProps = {
-  pertanyaan:
-    "Menurut teori konflik dalam sosiologi, apa yang menjadi sumber utama ketidaksetaraan dalam masyarakat?",
-  jawaban: "Pertentangan kepentingan antarkelompok",
-  jawaban_benar: "Pertentangan kepentingan antarkelompok",
-  jawaban_salah1: "Keterbatasan sumber daya alam",
-  jawaban_salah2: "Ketidakmampuan individu",
-  jawaban_salah3: "Perbedaan genetik",
-};
-
-const soalJawabanSalah1: CardQuestionAnsweredProps = {
-  pertanyaan:
-    "Menurut teori konflik dalam sosiologi, apa yang menjadi sumber utama ketidaksetaraan dalam masyarakat?",
-  jawaban: "Ketidakmampuan individu",
-  jawaban_benar: "Pertentangan kepentingan antarkelompok",
-  jawaban_salah1: "Keterbatasan sumber daya alam",
-  jawaban_salah2: "Ketidakmampuan individu",
-  jawaban_salah3: "Perbedaan genetik",
-};
-
-const historyDummy: ExerciseHistoryData = {
-  judul: "Mendapatkan Waifu Natzi",
-  Nilai: 12,
-  Modified_at: new Date(),
-  pembahasan: [
-    soalJawabanBener1,
-    soalJawabanBener2,
-    soalJawabanSalah1,
-    soalJawabanBener2,
-    soalJawabanSalah1,
-    soalJawabanSalah1,
-    soalJawabanBener1,
-  ],
-};
-// dummy data
 
 const ExerciseHistory = () => {
   const { id } = useParams();
@@ -72,7 +27,19 @@ const ExerciseHistory = () => {
     useState<ExerciseHistoryData | null>(null);
 
   useEffect(() => {
-    setExerciseHistoryData(historyDummy);
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/exercise/test2");
+
+        console.log("Data:", response.data.data);
+        setExerciseHistoryData(response.data.data);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+        setExerciseHistoryData(null);
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (exerciseHistoryData === null) {
@@ -95,7 +62,9 @@ const ExerciseHistory = () => {
               </p>
               <div className="flex flex-col gap-0">
                 <p>Last submitted :</p>
-                <p>{exerciseHistoryData.Modified_at.toDateString()}</p>
+                <p>
+                  {new Date(exerciseHistoryData.Modified_at).toDateString()}
+                </p>
               </div>
             </div>
             <div className="flex flex-col items-center justify-center rounded-md overflow-hidden w-[78px] border-[1px] border-purpleBg">
@@ -113,7 +82,10 @@ const ExerciseHistory = () => {
           {/* Pembahasan */}
           <div className="flex flex-col w-full justify-center items-center gap-3">
             {exerciseHistoryData.pembahasan.map((exerciseCard) => (
-              <CardQuestionAnswered {...exerciseCard} />
+              <CardQuestionAnswered
+                {...exerciseCard}
+                key={exerciseCard.ID_Soal}
+              />
             ))}
           </div>
         </div>
