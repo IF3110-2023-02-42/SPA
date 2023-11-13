@@ -1,38 +1,8 @@
 import { useState, useEffect } from "react";
+import api from "../../utils/api";
 
 import ElementExerciseQ from "../../components/ElementExerciseQ";
 import NavbarLayout from "../../layout/NavbarLayout";
-
-// dummy
-const elementExerciseQ1: ElementExerciseQ = {
-    pertanyaan: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa? 1",
-    jawaban_benar: "lorem ipsum t",
-    jawaban_salah1: "lorem ipsum",
-    jawaban_salah2: "lorem ipsum",
-    jawaban_salah3: "lorem ipsum",
-};
-
-const elementExerciseQ2: ElementExerciseQ = {
-    pertanyaan: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa? 2",
-    jawaban_benar: "lorem ipsum t",
-    jawaban_salah1: "lorem ipsum",
-    jawaban_salah2: "lorem ipsum",
-    jawaban_salah3: "lorem ipsum",
-};
-
-const elementExerciseQ3: ElementExerciseQ = {
-    pertanyaan: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa? 3",
-    jawaban_benar: "lorem ipsum t",
-    jawaban_salah1: "lorem ipsum",
-    jawaban_salah2: "lorem ipsum",
-    jawaban_salah3: "lorem ipsum",
-};
-
-const dummyExcerciseQ: ElementExerciseQ[] = [
-    elementExerciseQ1,
-    elementExerciseQ2,
-    elementExerciseQ3,
-];
 
 const Exercise = () => {
     const [exerciseQList, setExerciseQList] = useState<
@@ -40,13 +10,24 @@ const Exercise = () => {
     >(null);
 
     useEffect(() => {
-        setExerciseQList(dummyExcerciseQ);
-    }, []);
+        const fetchData = async() => {
+          try {
+            const response = await api.get("exercise_task/1");
+    
+            console.log("Data:", response.data.data);
+            setExerciseQList(response.data.data);
+          } catch (error) {
+            console.log("Error fetching data:", error);
+            setExerciseQList(null);
+          }
+        };
+        fetchData();
+      },[]);
 
     if (exerciseQList === null){
         return (
             <NavbarLayout>
-                <div>not found</div>
+                not found
             </NavbarLayout>
         );
     }
