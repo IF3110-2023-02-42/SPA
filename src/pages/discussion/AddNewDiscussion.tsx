@@ -69,7 +69,7 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
                 author:retrieveData.author, 
                 content:(retrieveData.content.length > 300) ? (retrieveData.content.slice(0,297)+"..."):retrieveData.content, 
                 numOfComment:retrieveData.numOfComment,
-                keywords:retrieveData.keywords.split(",")
+                keywords:retrieveData.keywords
             };
 
             addDiscussion(newDiscussion);
@@ -110,7 +110,7 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
                         <h4 className='font-bold text-xl'>Kata Kunci</h4>
                         <input type="text" value={keywordsInput} onChange={handleKeywordsChange} className="mt-2 w-full border border-gray-400 rounded-md p-1" />
                         <p>Tuliskan beberapa kata kunci pertanyaan Anda di sini dengan tanda koma sebagai pemisah. Maksimal 6 kata kunci yang bisa ditambahkan.</p>
-                        <p>Contoh: percepatan, gravitasi</p>
+                        <p>Contoh: percepatan,gravitasi</p>
                     </div>
 
                     <div className='flex justify-end w-full'>

@@ -48,7 +48,9 @@ const Home = () => {
         <div className="pb-3">
           <div className="flex space-x-4 items-center">
               <h2 className="text-2xl font-bold">{judul}</h2>
-              <p>{dateCreated} hari yang lalu</p>
+              {(dateCreated < 60) &&  <p>{dateCreated} menit yang lalu</p> }
+              {(dateCreated >= 60) && (dateCreated < 60*24) &&  <p>{Math.floor(dateCreated/60)} jam yang lalu</p> }
+              {(dateCreated > 60*24) &&  <p>{Math.floor(dateCreated/(60*24))} hari yang lalu</p> }
           </div>
           <p>By {author}</p>
         </div>
@@ -75,26 +77,28 @@ const Home = () => {
         <div className="w-full relative flex flex-col items-center justify-center py-5">
           <h1 className="text-4xl font-bold">Diskusi</h1>
           <div className="w-full pb-5 flex flex-col items-center"> 
-          {discussionCards.map((discussion) => (
-              <DiscussionCard
-                key={discussion.id}
-                id={discussion.id}
-                judul={discussion.judul}
-                dateCreated={discussion.dateCreated}
-                author={discussion.author}
-                content={discussion.content}
-                numOfComment={discussion.numOfComment}
-                keywords={discussion.keywords}
-              />
-            ))}
+            {(discussionCards.length != 0) ? (discussionCards.map((discussion) => (
+                <DiscussionCard
+                  key={discussion.id}
+                  id={discussion.id}
+                  judul={discussion.judul}
+                  dateCreated={discussion.dateCreated}
+                  author={discussion.author}
+                  content={discussion.content}
+                  numOfComment={discussion.numOfComment}
+                  keywords={discussion.keywords}
+                />
+              ))) :
+              (<div className="py-10"> Not Found </div>)
+            }
+         </div>
+          <div className="fixed w-full py-10 pr-20 flex justify-end bottom-0 z-20">
+            <FaPlus 
+              className="text-creamBg shadow-md bg-purpleBg opacity-100 transition duration-300 ease-in-out hover:scale-105 hover:cursor-pointer mr-2 p-1.5 rounded-md"  
+              size={70}
+              onClick = {toggleModal}
+            />
           </div>
-        </div>
-        <div className="fixed w-full py-10 pr-20 flex justify-end bottom-0 z-20">
-          <FaPlus 
-            className="text-creamBg shadow-md bg-purpleBg opacity-100 transition duration-300 ease-in-out hover:scale-105 hover:cursor-pointer mr-2 p-1.5 rounded-md"  
-            size={70}
-            onClick = {toggleModal}
-          />
         </div>
       </div>
     </div>
