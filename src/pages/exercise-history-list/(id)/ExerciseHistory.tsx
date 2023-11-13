@@ -21,6 +21,10 @@ type ExerciseHistoryData = {
   pembahasan: CardQuestionAnsweredProps[];
 };
 
+// dummy
+const ID_Pengguna = 2;
+// dummy
+
 const ExerciseHistory = () => {
   const { id } = useParams();
   const [exerciseHistoryData, setExerciseHistoryData] =
@@ -29,10 +33,15 @@ const ExerciseHistory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/exercise/test2");
+        const response = await api.get("/exercise/getHistoryExerciseById", {
+          params: {
+            ID_Pengguna: ID_Pengguna,
+            ID_Latsol: id,
+          },
+        });
 
         console.log("Data:", response.data.data);
-        setExerciseHistoryData(response.data.data);
+        // setExerciseHistoryData(response.data.data);
       } catch (error) {
         console.log("Error fetching data:", error);
         setExerciseHistoryData(null);
@@ -45,7 +54,7 @@ const ExerciseHistory = () => {
   if (exerciseHistoryData === null) {
     return (
       <NavbarLayout>
-        <div>not found</div>
+        <div className="w-full text-center">History not found</div>
       </NavbarLayout>
     );
   }
