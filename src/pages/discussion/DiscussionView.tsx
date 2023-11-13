@@ -1,12 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
+import { useParams } from "react-router-dom";
 import api from "../../utils/api";
 
 import ElementDiscussion from "../../components/ElementDiscussion";
-import ElementAddComment from "../../components/ElementAddComment";
 import ElementDiscussionComment from "../../components/ElementDiscussionComment";
 import NavbarLayout from "../../layout/NavbarLayout";
 
 const DiscussionView = () => {
+  let id = useParams();
+  const [commentInput, setCommentInput] = useState<string>('');
+  
+  const handleCommentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentInput(event.target.value);
+  };
+
+  const sendComment = async (konten_input: string) => {
+    const penulis = "belumada";
+    const created_at = new Date();
+    const updated_at = new Date();
+    const konten = konten_input;
+    const jumlah_upvote = 0;
+    const jumlah_downvote = 0;
+
+    try{
+      const response = await api.post("/1/addcomment", 
+        {
+          penulis: penulis,
+          created_at: created_at,
+          updated_at: updated_at,
+          konten: konten,
+          jumlah_upvote: jumlah_upvote,
+          jumlah_downvote: jumlah_downvote
+        }
+      )
+      console.log("Data:", response.data.data);
+    } catch (error){
+      console.log("Error fetching data:", error);
+    }
+  };
+
   const [detail, setDetail] = useState <
     ElementDiscussion | null
     >(null);
@@ -65,7 +97,11 @@ const DiscussionView = () => {
               konten = {detail.konten}
               jumlah_komentar = {detail.jumlah_komentar}
             />
-            <ElementAddComment />
+            <div className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
+                  <p className="font-semibold">Add new comment</p>
+                  <input className="w-full" onChange={()=>handleCommentChange} value={commentInput} placeholder="Add new comment..."></input>
+                  <button className="self-center bg-purpleBg text-white p-[1%] rounded-[15px] hover:scale-[110%] active:bg-[#30123f]" onClick={()=>sendComment(commentInput)}>Send</button>
+              </div>
           </div>
         </div>
       </NavbarLayout>
@@ -84,7 +120,11 @@ const DiscussionView = () => {
               konten = {detail.konten}
               jumlah_komentar = {detail.jumlah_komentar}
             />
-              <ElementAddComment />
+              <div className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
+                  <p className="font-semibold">Add new comment</p>
+                  <input className="w-full" onChange={()=>handleCommentChange} value={commentInput} placeholder="Add new comment..."></input>
+                  <button className="self-center bg-purpleBg text-white p-[1%] rounded-[15px] hover:scale-[110%] active:bg-[#30123f]" onClick={()=>sendComment(commentInput)}>Send</button>
+              </div>
               {commentList.map((comment) => (
                 <ElementDiscussionComment {...comment} />
               ))}
