@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import api from "../../utils/api";
+import api from "../../utils/api";
 
 import ElementExerciseQ from "../../components/ElementExerciseQ";
 import NavbarLayout from "../../layout/NavbarLayout";
+import { useParams } from "react-router";
 
 const Exercise = () => {
+    const {id} = useParams();
     const [exerciseQList, setExerciseQList] = useState<
         ElementExerciseQ[] | null
     >(null);
@@ -12,7 +15,7 @@ const Exercise = () => {
     useEffect(() => {
         const fetchData = async() => {
           try {
-            const response = await api.get("exercise_task/1");
+            const response = await api.get("exercise_task/"+id);
     
             console.log("Data:", response.data.data);
             setExerciseQList(response.data.data);
@@ -22,7 +25,7 @@ const Exercise = () => {
           }
         };
         fetchData();
-      },[]);
+      },[id]);
 
     if (exerciseQList === null){
         return (
@@ -31,7 +34,6 @@ const Exercise = () => {
             </NavbarLayout>
         );
     }
-
     return (
         <NavbarLayout>
             <div className="flex flex-col w-full justify-center items-center p-2 sm:p-10">

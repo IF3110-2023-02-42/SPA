@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import NavbarLayout from "../../../layout/NavbarLayout";
 import CardQuestionAnswered from "../../../components/CardQuestionAnswered";
 import api from "../../../utils/api";
+import toast from "react-hot-toast";
 
 type CardQuestionAnsweredProps = {
   ID_Soal: string;
@@ -21,6 +22,10 @@ type ExerciseHistoryData = {
   pembahasan: CardQuestionAnsweredProps[];
 };
 
+// dummy
+const ID_Pengguna = 2;
+// dummy
+
 const ExerciseHistory = () => {
   const { id } = useParams();
   const [exerciseHistoryData, setExerciseHistoryData] =
@@ -29,23 +34,30 @@ const ExerciseHistory = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/exercise/test2");
-
-        console.log("Data:", response.data.data);
+        const response = await api.get("/exercise/getHistoryExerciseById", {
+          params: {
+            ID_Pengguna: ID_Pengguna,
+            ID_Latsol: id,
+          },
+          headers : {
+            accessToken : sessionStorage.getItem("accessToken"),
+          }
+        });
+        console.log("response.data.data", response.data.data);
         setExerciseHistoryData(response.data.data);
       } catch (error) {
-        console.log("Error fetching data:", error);
+        toast.error(error.response.data.message);
         setExerciseHistoryData(null);
       }
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   if (exerciseHistoryData === null) {
     return (
       <NavbarLayout>
-        <div>not found</div>
+        <div className="w-full text-center">History not found</div>
       </NavbarLayout>
     );
   }
@@ -81,12 +93,16 @@ const ExerciseHistory = () => {
 
           {/* Pembahasan */}
           <div className="flex flex-col w-full justify-center items-center gap-3">
-            {exerciseHistoryData.pembahasan.map((exerciseCard) => (
-              <CardQuestionAnswered
-                {...exerciseCard}
-                key={exerciseCard.ID_Soal}
-              />
-            ))}
+            {exerciseHistoryData?.pembahasan.length !== 0 ? (
+              exerciseHistoryData.pembahasan.map((exerciseCard) => (
+                <CardQuestionAnswered
+                  {...exerciseCard}
+                  key={exerciseCard.ID_Soal}
+                />
+              ))
+            ) : (
+              <div>No question found</div>
+            )}
           </div>
         </div>
       </div>

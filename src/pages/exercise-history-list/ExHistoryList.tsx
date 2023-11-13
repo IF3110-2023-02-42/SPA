@@ -7,25 +7,34 @@ import NavbarLayout from "../../layout/NavbarLayout";
 type CardHistoryExerciseProps = {
   judul: string;
   ID_Latsol: string;
-  Nilai: number;
-  Modified_at: string;
+  nilai: number;
+  modified_at: string;
 };
 
+// dummy
+const ID_Pengguna = 2;
+// dummy
+
 const ExHistoryList = () => {
-  const [exerciseList, setExerciseList] = useState<
-    CardHistoryExerciseProps[] | null
-  >(null);
+  const [exerciseList, setExerciseList] =
+    useState<CardHistoryExerciseProps[]>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/exercise/test");
+        const response = await api.get("/exercise/getHistoryExerciseListById", {
+          params: {
+            ID_Pengguna: ID_Pengguna,
+          },
+          headers : {
+            accessToken : sessionStorage.getItem("accessToken"),
+          },
+        });
 
-        console.log("Data:", response.data.data);
         setExerciseList(response.data.data);
       } catch (error) {
         console.log("Error fetching data:", error);
-        setExerciseList(null);
+        setExerciseList([]);
       }
     };
 
@@ -36,15 +45,15 @@ const ExHistoryList = () => {
     <NavbarLayout>
       <div className="flex flex-col w-full justify-center items-center p-2 sm:p-10">
         <div className="flex flex-col w-full justify-center items-center gap-3">
-          {exerciseList ? (
-            exerciseList.map((exerciseCard) => (
+          {exerciseList?.length !== 0 ? (
+            exerciseList?.map((exerciseCard) => (
               <CardHistoryExercise
                 {...exerciseCard}
                 key={exerciseCard.ID_Latsol}
               />
             ))
           ) : (
-            <div>not found</div>
+            <div>No history found</div>
           )}
         </div>
       </div>
