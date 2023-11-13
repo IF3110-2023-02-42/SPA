@@ -1,12 +1,13 @@
 import { useState, ChangeEvent } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import api from '../../utils/api';
 
 export interface Discussion{
-    key: number,
+    id: string,
     judul : string,
     dateCreated: number,
     author: string,
-    contentSnippet: string,
+    content: string,
     numOfComment: number,
     keywords: string[];
 }
@@ -38,46 +39,39 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
         }
       };
     
-    const submitNewDiscussion = async (judul : string,  contentSnippet : string, keywords : string)=>{
+    const submitNewDiscussion = async (judul : string,  content : string, keywords : string)=>{
         // Get another data
-        let dateCreated = 0; // Karena pada hari yang sama dengan saat diskusi dibuat
         let author = 'Fadhil'; // Ambil dari session nanti
         let numOfComment = 0;
         // Add new discussion to REST
-        const response = await fetch("http://localhost:3000/discussion/add", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                judul: judul,
-                dateCreated: new Date(),
-                author: author,
-                contentSnippet: contentSnippet, // Catatan: numOfComment dihitung setiap dilakukan get
-                keywords: keywords,
-                numOfComment: numOfComment                
-            })
-        });
+        let newData= {
+            judul: judul,
+            author: author,
+            content: content,
+            keywords: keywords,
+            numOfComment: numOfComment   
+        };
+        const response = await api.post("/discussion/add", newData);
 
-        const data = await response.json();
+        console.log(response.data);
 
-        if (response.ok){
+        if (response.data.message=="OK"){
             console.log("add Discussion Success");
             // Mungkin nambahin modal
 
             // responsenya juga ngirimin balik data tadi
-            
-            let keywordsParsed : string[] = keywords.split(','); // Nanti udh retrieve dari REST
+            let retrieveData = response.data.data;
     
             let newDiscussion: Discussion = {
-                key:data.data.id, 
-                judul:judul, 
-                dateCreated:dateCreated, 
-                author:author, 
-                contentSnippet:(contentSnippet.length > 300) ? (contentSnippet.slice(0,297)+"..."):contentSnippet, 
-                numOfComment:numOfComment,
-                keywords:keywordsParsed
+                id:retrieveData.id, 
+                judul:retrieveData.judul, 
+                dateCreated:retrieveData.dateCreated, 
+                author:retrieveData.author, 
+                content:(retrieveData.content.length > 300) ? (retrieveData.content.slice(0,297)+"..."):retrieveData.content, 
+                numOfComment:retrieveData.numOfComment,
+                keywords:retrieveData.keywords
             };
+
             addDiscussion(newDiscussion);
             toggleModal();
         } else {
@@ -116,7 +110,7 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
                         <h4 className='font-bold text-xl'>Kata Kunci</h4>
                         <input type="text" value={keywordsInput} onChange={handleKeywordsChange} className="mt-2 w-full border border-gray-400 rounded-md p-1" />
                         <p>Tuliskan beberapa kata kunci pertanyaan Anda di sini dengan tanda koma sebagai pemisah. Maksimal 6 kata kunci yang bisa ditambahkan.</p>
-                        <p>Contoh: percepatan, gravitasi</p>
+                        <p>Contoh: percepatan,gravitasi</p>
                     </div>
 
                     <div className='flex justify-end w-full'>
