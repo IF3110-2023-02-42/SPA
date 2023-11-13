@@ -2,6 +2,8 @@ import toast from "react-hot-toast";
 import loginCharacter from "../../assets/3d-login.webp";
 import loginBg from "../../assets/login-bg.png";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -17,10 +19,26 @@ const Login = () => {
     }));
   };
 
-  const submitForm = (event: FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    toast.success("test");
-    console.log("data", data);
+    let dataUser = {
+      username : data.username,
+      password : data.password,
+    }
+
+    const response = await api.post("/user/login", dataUser);
+
+    console.log(response.data);
+
+    if (response.data.message=="OK"){
+      toast.success("test");
+      sessionStorage.setItem("accessToken", response.data.data);
+      navigate('/');
+    } else {
+      toast.error("test");
+    }
   };
 
   return (

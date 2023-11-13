@@ -26,6 +26,9 @@ const ExHistoryList = () => {
           params: {
             ID_Pengguna: ID_Pengguna,
           },
+          headers : {
+            accessToken : sessionStorage.getItem("accessToken"),
+          },
         });
 
         setExerciseList(response.data.data);

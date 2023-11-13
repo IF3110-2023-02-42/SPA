@@ -38,6 +38,9 @@ const ExerciseHistory = () => {
             ID_Pengguna: ID_Pengguna,
             ID_Latsol: id,
           },
+          headers : {
+            accessToken : sessionStorage.getItem("accessToken"),
+          }
         });
 
         console.log("Data:", response.data.data);

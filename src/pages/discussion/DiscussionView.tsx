@@ -14,7 +14,13 @@ const DiscussionView = () => {
     useEffect(() => {
       const fetchData = async() => {
         try {
-          const response = await api.get("discussion_view/1");
+          const response = await api.get("discussion_view/1", 
+          {
+            headers : {
+              accessToken : sessionStorage.getItem("accessToken"),
+            }
+          }
+          );
   
           console.log("Data:", response.data.data);
           setDetail(response.data.data);
