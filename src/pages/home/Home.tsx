@@ -13,11 +13,16 @@ const Home = () => {
   async function getDiscussionsData(){
     
     // Get Discussion Data to REST webservice
-    const response = await api.get("/discussion");
+    const response = await api.get("/discussion", {
+      headers : {
+        accessToken : sessionStorage.getItem("accessToken"),
+      }
+    });
     if (response.data.message=="OK"){
       console.log(response.data.data)
       setDiscussionCards(response.data.data);
     } else{
+      console.log(response.data);
       console.log("Failed to fetch discussion data");
     }
   }

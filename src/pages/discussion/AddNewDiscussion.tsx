@@ -51,7 +51,11 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
             keywords: keywords,
             numOfComment: numOfComment   
         };
-        const response = await api.post("/discussion/add", newData);
+        const response = await api.post("/discussion/add", newData, {
+            headers : {
+                accessToken : sessionStorage.getItem("accessToken"),
+              }
+        });
 
         console.log(response.data);
 

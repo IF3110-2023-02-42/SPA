@@ -1,18 +1,17 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 type CardHistoryExerciseProps = {
   judul: string;
   ID_Latsol: string;
-  Nilai: number;
-  Modified_at: string;
+  nilai: number;
+  modified_at: string;
 };
 
 const CardHistoryExercise = ({
   judul,
   ID_Latsol,
-  Nilai,
-  Modified_at,
+  nilai,
+  modified_at,
 }: CardHistoryExerciseProps) => {
   return (
     <Link
@@ -23,13 +22,13 @@ const CardHistoryExercise = ({
         <p className="font-semibold text-[20px]">{judul}</p>
         <div className="flex flex-col gap-0">
           <p>Last submitted :</p>
-          <p>{new Date(Modified_at).toDateString()}</p>
+          <p>{new Date(modified_at).toDateString()}</p>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center rounded-md overflow-hidden w-[78px] border-[1px] border-purpleBg">
         <p className="bg-purpleBg text-white py-1 text-center w-full">Score</p>
         <p className=" text-black w-full text-center py-1 font-semibold">
-          {Nilai}
+          {nilai}
         </p>
       </div>
     </Link>
