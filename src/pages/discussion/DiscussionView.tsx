@@ -1,86 +1,70 @@
 import { useState, useEffect } from "react";
+import api from "../../utils/api";
 
 import ElementDiscussion from "../../components/ElementDiscussion";
 import ElementAddComment from "../../components/ElementAddComment";
 import ElementDiscussionComment from "../../components/ElementDiscussionComment";
 import NavbarLayout from "../../layout/NavbarLayout";
 
-// dummy
-const elementDiscussion: ElementDiscussion = {
-    penulis: "penulis0123",
-    created_at: Date(),
-    updated_at: Date(),
-    judul: "Judul",
-    konten: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.
-    Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.
-    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci?
-    `,
-    jumlah_komentar: 3,
-};
-
-const elementDiscussionComment1: ElementDiscussionComment = {
-  penulis: "komentator1",
-  created_at: Date(),
-  updated_at: Date(),
-  konten: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.
-  Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.
-  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.
-  Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.
-  Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.
-  `,
-  jumlah_upvote: 3,
-  jumlah_downvote: 0,
-};
-
-const elementDiscussionComment2: ElementDiscussionComment = {
-  penulis: "komentator2",
-  created_at: Date(),
-  updated_at: Date(),
-  konten: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.
-  Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.
-  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.
-  Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.
-  Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.
-  `,
-  jumlah_upvote: 4,
-  jumlah_downvote: 2,
-};
-
-const elementDiscussionComment3: ElementDiscussionComment = {
-  penulis: "komentator3",
-  created_at: Date(),
-  updated_at: Date(),
-  konten: `Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.
-  Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.
-  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.
-  Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.
-  Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.
-  `,
-  jumlah_upvote: 1,
-  jumlah_downvote: 0,
-};
-
-const dummyDiscussionComment: ElementDiscussionComment[] = [
-  elementDiscussionComment1,
-  elementDiscussionComment2,
-  elementDiscussionComment3,
-];
-
 const DiscussionView = () => {
+  const [detail, setDetail] = useState <
+    ElementDiscussion | null
+    >(null);
+    
+    useEffect(() => {
+      const fetchData = async() => {
+        try {
+          const response = await api.get("discussion_view/1");
+  
+          console.log("Data:", response.data.data);
+          setDetail(response.data.data);
+        } catch (error) {
+          console.log("Error fetching data:", error);
+          setDetail(null);
+        }
+      };
+      fetchData();
+    },[]);
+
   const [commentList, setCommentList] = useState <
     ElementDiscussionComment[] | null
     >(null);
 
     useEffect(() => {
-      setCommentList(dummyDiscussionComment);
-    }, []);
+      const fetchData = async() => {
+        try {
+          const response = await api.get("discussion_view/1/comment");
+  
+          console.log("Data:", response.data.data);
+          setCommentList(response.data.data);
+        } catch (error) {
+          console.log("Error fetching data:", error);
+          setCommentList(null);
+        }
+      };
+      fetchData();
+    },[]);
 
-    if (commentList === null){
+    if (detail === null){
+      return (
+        <NavbarLayout>
+          not found
+        </NavbarLayout>
+      );
+    }
+    else if (commentList === null){
       <NavbarLayout>
         <div className="flex flex-col w-full justify-center items-center p-2 sm:p-10">
           <p className="m-[1%] font-semibold text-[30px]">Discussion</p>
           <div className="flex flex-col w-full justify-center items-center gap-3">
-            <ElementDiscussion {...elementDiscussion}/>
+            <ElementDiscussion 
+              penulis = {detail.penulis}
+              created_at = {detail.created_at}
+              updated_at = {detail.updated_at}
+              judul = {detail.judul}
+              konten = {detail.konten}
+              jumlah_komentar = {detail.jumlah_komentar}
+            />
             <ElementAddComment />
           </div>
         </div>
@@ -92,7 +76,14 @@ const DiscussionView = () => {
           <div className="flex flex-col w-full justify-center items-center p-2 sm:p-10">
             <p className="m-[1%] font-semibold text-[30px]">Discussion</p>
             <div className="flex flex-col w-full justify-center items-center gap-3">
-              <ElementDiscussion {...elementDiscussion}/>
+            <ElementDiscussion 
+              penulis = {detail.penulis}
+              created_at = {detail.created_at}
+              updated_at = {detail.updated_at}
+              judul = {detail.judul}
+              konten = {detail.konten}
+              jumlah_komentar = {detail.jumlah_komentar}
+            />
               <ElementAddComment />
               {commentList.map((comment) => (
                 <ElementDiscussionComment {...comment} />
