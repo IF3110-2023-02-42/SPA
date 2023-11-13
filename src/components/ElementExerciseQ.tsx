@@ -1,4 +1,5 @@
 type ElementExerciseQ = {
+    id_soal: string;
     pertanyaan: string;
     jawaban_benar: string;
     jawaban_salah1: string;
@@ -7,6 +8,7 @@ type ElementExerciseQ = {
 };
 
 const ElementExerciseQ = ({
+    id_soal,
     pertanyaan,
     jawaban_benar,
     jawaban_salah1,
@@ -16,7 +18,7 @@ const ElementExerciseQ = ({
     const generateOptions = (option: string) =>{
         return (
             <div className="flex flex-row justify-start items-center gap-2 ml-2">
-              <input type="radio" name={pertanyaan}></input>
+              <input type="radio" name={id_soal}></input>
               <div>{option}</div>
             </div>
           );

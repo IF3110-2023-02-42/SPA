@@ -35,7 +35,7 @@ export const router = () =>
           element: <DiscussionView />,
         },
         {
-          path: "/exercise",
+          path: "/exercise/:id",
           element: <Exercise />,
         },
         {
