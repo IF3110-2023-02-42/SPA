@@ -23,6 +23,7 @@ const Exercise = () => {
         }));
         console.log(jawaban);
         const newData = {
+            modified_at: new Date(),
             ID_Pengguna: 1,
             jawaban: jawaban,
         };
