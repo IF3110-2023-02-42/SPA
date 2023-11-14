@@ -9,9 +9,13 @@ import api from "../../utils/api";
 const Home = () => {
   const [modal, setModal] = useState(false);
   const [discussionCards, setDiscussionCards] = useState<Discussion[]>([])
+  const navigate = useNavigate();
   
   async function getDiscussionsData(){
-    
+    if (!sessionStorage.getItem("accessToken")){
+      navigate("/login");
+    }
+
     // Get Discussion Data to REST webservice
     const response = await api.get("/discussion", {
       headers : {
@@ -36,7 +40,6 @@ const Home = () => {
     console.log(modal);
   };
 
-  const navigate = useNavigate()
   function addDiscussion(newDiscussion:Discussion){
     setDiscussionCards((prevDiscussions)=> [...prevDiscussions, newDiscussion])
   }
@@ -55,7 +58,9 @@ const Home = () => {
               <h2 className="text-2xl font-bold">{judul}</h2>
               {(dateCreated < 60) &&  <p>{dateCreated} menit yang lalu</p> }
               {(dateCreated >= 60) && (dateCreated < 60*24) &&  <p>{Math.floor(dateCreated/60)} jam yang lalu</p> }
-              {(dateCreated > 60*24) &&  <p>{Math.floor(dateCreated/(60*24))} hari yang lalu</p> }
+              {(dateCreated >= 60*24) && (dateCreated < 60*24*30) &&  <p>{Math.floor(dateCreated/(60*24))} hari yang lalu</p> }
+              {(dateCreated >= 60*24*30) && (dateCreated < 60*24*365) &&  <p>{Math.floor(dateCreated/(60*24*30))} bulan yang lalu</p> }
+              {(dateCreated >= 60*24*365) &&  <p>{Math.floor(dateCreated/(60*24*365))} tahun yang lalu</p> }
           </div>
           <p>By {author}</p>
         </div>
@@ -68,7 +73,7 @@ const Home = () => {
           ))}
         </div>
         <div className="discussion-numOfComment flex items-center space-x-4">
-            <FaComment className="text-gray-300 rounded-full"  size={45}/>
+            <FaComment className="text-gray-300 rounded-full"  size={35}/>
             <p>{numOfComment} Pembahasan</p>
         </div>
     </div>
@@ -80,7 +85,7 @@ const Home = () => {
       {modal && <AddNewDiscussion toggleModal={toggleModal} addDiscussion={addDiscussion}/>}
       <div className=" mx-auto px-2 sm:px-6 lg:px-8  relative">
         <div className="w-full relative flex flex-col items-center justify-center py-5">
-          <h1 className="text-4xl font-bold">Diskusi</h1>
+          <h1 className="text-4xl font-bold">Discussions</h1>
           <div className="w-full pb-5 flex flex-col items-center"> 
             {(discussionCards.length != 0) ? (discussionCards.map((discussion) => (
                 <DiscussionCard
@@ -100,7 +105,7 @@ const Home = () => {
           <div className="fixed w-full py-10 pr-20 flex justify-end bottom-0 z-20">
             <FaPlus 
               className="text-creamBg shadow-md bg-purpleBg opacity-100 transition duration-300 ease-in-out hover:scale-105 hover:cursor-pointer mr-2 p-1.5 rounded-md"  
-              size={70}
+              size={60}
               onClick = {toggleModal}
             />
           </div>
