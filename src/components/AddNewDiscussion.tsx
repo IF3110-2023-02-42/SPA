@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import api from '../../utils/api';
+import api from '../utils/api';
 
 export interface Discussion{
     id: string,
