@@ -1,3 +1,4 @@
+
 type ElementExerciseQ = {
     id_soal: string;
     pertanyaan: string;
@@ -5,6 +6,8 @@ type ElementExerciseQ = {
     jawaban_salah1: string;
     jawaban_salah2: string;
     jawaban_salah3: string;
+    selectedOption: string;
+    handleOptionChange: (value: string) => void
 };
 
 const ElementExerciseQ = ({
@@ -14,11 +17,18 @@ const ElementExerciseQ = ({
     jawaban_salah1,
     jawaban_salah2,
     jawaban_salah3,
+    selectedOption,
+    handleOptionChange,
 }: ElementExerciseQ) => {
     const generateOptions = (option: string) =>{
         return (
             <div className="flex flex-row justify-start items-center gap-2 ml-2">
-              <input type="radio" name={id_soal}></input>
+              <input type="radio"
+              name={id_soal}
+              checked={selectedOption === option}
+              onChange={() => handleOptionChange(option)}
+              value={option}
+              ></input>
               <div>{option}</div>
             </div>
           );
