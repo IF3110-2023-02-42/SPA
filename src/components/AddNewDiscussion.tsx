@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import api from '../../utils/api';
+import api from '../utils/api';
+import toast from 'react-hot-toast';
 
 export interface Discussion{
     id: string,
@@ -17,7 +18,7 @@ interface AddNewDiscussionProps {
     addDiscussion: (discussion: Discussion) => void,
   }
 export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDiscussionProps) {
-    const [uraianInput, setUraianInput] = useState<string>('Type Something');
+    const [uraianInput, setUraianInput] = useState<string>('');
     const [judulInput, setJudulInput] = useState<string>(''); 
     const [keywordsInput, setKeywordsInput] = useState<string>('');
 
@@ -41,7 +42,7 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
     
     const submitNewDiscussion = async (judul : string,  content : string, keywords : string)=>{
         // Get another data
-        let author = 'Fadhil'; // Ambil dari session nanti
+        let author = sessionStorage.getItem("username");
         let numOfComment = 0;
         // Add new discussion to REST
         let newData= {
@@ -61,9 +62,8 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
 
         if (response.data.message=="OK"){
             console.log("add Discussion Success");
-            // Mungkin nambahin modal
+            toast.success("Berhasil menambahkan diskusi");
 
-            // responsenya juga ngirimin balik data tadi
             let retrieveData = response.data.data;
     
             let newDiscussion: Discussion = {
@@ -80,7 +80,7 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
             toggleModal();
         } else {
             console.log("add Discussion Failed");
-            // Mungkin nambahin modal
+            toast.error("Failed to add Discussion");
         }
     }
     

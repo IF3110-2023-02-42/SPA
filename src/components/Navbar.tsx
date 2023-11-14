@@ -32,7 +32,7 @@ export default function Navbar() {
   const generateLinks = (options: NavbarRoute[]) => {
     return options.map((opt: NavbarRoute) => (
       <Link to={opt.path} key={opt.path}>
-        <label>{opt.label}</label>
+        <label className="hover:cursor-pointer hover:text-black transition duration-300 ease-in-out" >{opt.label}</label>
       </Link>
     ));
   };

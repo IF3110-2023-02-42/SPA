@@ -1,104 +1,127 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
+import { useParams } from "react-router-dom";
 import api from "../../utils/api";
 
-import ElementDiscussion from "../../components/ElementDiscussion";
-import ElementAddComment from "../../components/ElementAddComment";
-import ElementDiscussionComment from "../../components/ElementDiscussionComment";
+import ElementDiscussion, { ElementDiscussionProps } from "../../components/ElementDiscussion";
+import ElementDiscussionComment, { ElementDiscussionCommentProps } from "../../components/ElementDiscussionComment";
 import NavbarLayout from "../../layout/NavbarLayout";
+import toast from "react-hot-toast";
 
 const DiscussionView = () => {
-  const [detail, setDetail] = useState <
-    ElementDiscussion | null
-    >(null);
+  
+  const [commentInput, setCommentInput] = useState<string>('');
+  const {id_diskusi} = useParams();
+
+
+  const handleCommentChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCommentInput(event.target.value);
+  };
+
+  const sendComment = async (konten_input: string) => {
+    const penulis = sessionStorage.getItem("username");
+    const konten = konten_input;
+    const jumlah_upvote = 0;
+    const jumlah_downvote = 0;
     
-    useEffect(() => {
-      const fetchData = async() => {
-        try {
-          const response = await api.get("discussion_view/1", 
+    const response = await api.post("discussion_view/comment/add", 
+      {
+        id_diskusi: id_diskusi,
+        penulis: penulis,
+        konten: konten,
+        jumlah_upvote: jumlah_upvote,
+        jumlah_downvote: jumlah_downvote
+      }, {
+        headers : {
+          accessToken : sessionStorage.getItem("accessToken"),
+        }
+      }
+    )
+    if (response.data.message==="OK"){
+      console.log("Data:", response.data.data);
+      toast.success("Berhasil menambahkan komentar")
+      setCommentList((prevCommentList) => [...prevCommentList, response.data.data])
+    } else {
+      console.log("Error add comment");
+      toast.error("Error adding comment");
+    }
+
+  };
+
+  const [detail, setDetail] = useState <ElementDiscussionProps | null>(null);
+    
+  useEffect(() => {
+    const fetchData = async() => {
+      try {
+        if(id_diskusi){
+          const response = await api.get(`discussion_view/${id_diskusi}`, 
           {
             headers : {
               accessToken : sessionStorage.getItem("accessToken"),
             }
           }
           );
-  
-          console.log("Data:", response.data.data);
+          console.log("Data:", response);
           setDetail(response.data.data);
-        } catch (error) {
-          console.log("Error fetching data:", error);
-          setDetail(null);
         }
-      };
-      fetchData();
-    },[]);
 
-  const [commentList, setCommentList] = useState <
-    ElementDiscussionComment[] | null
-    >(null);
+      } catch (error) {
+        console.log("Error fetching discussion data:", error);
+        toast.error("Error fetching discussion data");
+      }
+    };
+    fetchData();
+  },[]);
 
-    useEffect(() => {
+  const [commentList, setCommentList] = useState <ElementDiscussionCommentProps[]>([]);
+
+  useEffect(() => {
       const fetchData = async() => {
         try {
-          const response = await api.get("discussion_view/1/comment");
-  
+          const response = await api.get(`discussion_view/comment/${id_diskusi}`,
+          {
+            headers : {
+              accessToken : sessionStorage.getItem("accessToken"),
+            }
+          });
+          
           console.log("Data:", response.data.data);
           setCommentList(response.data.data);
         } catch (error) {
           console.log("Error fetching data:", error);
-          setCommentList(null);
+          toast.error("Error fetching comments data");
         }
       };
       fetchData();
     },[]);
 
-    if (detail === null){
-      return (
-        <NavbarLayout>
-          not found
-        </NavbarLayout>
-      );
-    }
-    else if (commentList === null){
-      <NavbarLayout>
-        <div className="flex flex-col w-full justify-center items-center p-2 sm:p-10">
-          <p className="m-[1%] font-semibold text-[30px]">Discussion</p>
-          <div className="flex flex-col w-full justify-center items-center gap-3">
+    return <NavbarLayout>
+      {detail ? 
+        (<div className="flex flex-col w-full justify-center items-center px-10">
+          <p className="m-[2%] font-semibold text-3xl">Discussion</p>
+          <div className="flex flex-col w-4/5 justify-center items-center gap-3">
             <ElementDiscussion 
               penulis = {detail.penulis}
               created_at = {detail.created_at}
-              updated_at = {detail.updated_at}
               judul = {detail.judul}
               konten = {detail.konten}
               jumlah_komentar = {detail.jumlah_komentar}
+              keywords={detail.keywords}
             />
-            <ElementAddComment />
-          </div>
-        </div>
-      </NavbarLayout>
-    }
-    else{
-      return (
-        <NavbarLayout>
-          <div className="flex flex-col w-full justify-center items-center p-2 sm:p-10">
-            <p className="m-[1%] font-semibold text-[30px]">Discussion</p>
-            <div className="flex flex-col w-full justify-center items-center gap-3">
-            <ElementDiscussion 
-              penulis = {detail.penulis}
-              created_at = {detail.created_at}
-              updated_at = {detail.updated_at}
-              judul = {detail.judul}
-              konten = {detail.konten}
-              jumlah_komentar = {detail.jumlah_komentar}
-            />
-              <ElementAddComment />
-              {commentList.map((comment) => (
-                <ElementDiscussionComment {...comment} />
-              ))}
+            <div className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
+                <p className="font-semibold text-xl">Add new comment</p>
+                <input type="text" className="w-full p-1 border border-purpleBg" onChange={handleCommentChange} value={commentInput} placeholder="Type Something"></input>
+                <button className="self-end bg-purpleBg text-white p-[1%] rounded-[15px] hover:scale-[110%] active:bg-[#30123f]" onClick={()=>sendComment(commentInput)}>Send</button>
             </div>
+            {commentList && commentList.map((comment) => (
+                <ElementDiscussionComment key={comment.id_komentar} {...comment} />
+              ))}
           </div>
-        </NavbarLayout>
-      );
-    }
+        </div>)
+        :
+        (<div> Not Found</div>)
+      }
+    </NavbarLayout>
+
     
 };
 

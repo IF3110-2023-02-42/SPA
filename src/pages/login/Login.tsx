@@ -35,6 +35,8 @@ const Login = () => {
     if (response.data.message=="OK"){
       toast.success("test");
       sessionStorage.setItem("accessToken", response.data.data);
+      sessionStorage.setItem("username", dataUser.username);
+
       navigate('/');
     } else {
       toast.error("test");
