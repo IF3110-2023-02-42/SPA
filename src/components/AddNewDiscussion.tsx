@@ -1,6 +1,7 @@
 import { useState, ChangeEvent } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import api from '../utils/api';
+import toast from 'react-hot-toast';
 
 export interface Discussion{
     id: string,
@@ -61,9 +62,8 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
 
         if (response.data.message=="OK"){
             console.log("add Discussion Success");
-            // Mungkin nambahin modal
+            toast.success("Berhasil menambahkan diskusi");
 
-            // responsenya juga ngirimin balik data tadi
             let retrieveData = response.data.data;
     
             let newDiscussion: Discussion = {
@@ -80,7 +80,7 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
             toggleModal();
         } else {
             console.log("add Discussion Failed");
-            // Mungkin nambahin modal
+            toast.error("Failed to add Discussion");
         }
     }
     

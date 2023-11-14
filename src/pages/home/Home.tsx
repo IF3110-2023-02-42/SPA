@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 import NavbarLayout from "../../layout/NavbarLayout";
 import  DiscussionCard  from "../../components/CardDiscussion";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [modal, setModal] = useState(false);
@@ -28,7 +29,7 @@ const Home = () => {
       setDiscussionCards(response.data.data);
     } else{
       console.log(response.data);
-      console.log("Failed to fetch discussion data");
+      toast.error("Failed to fetch discussion data"); 
     }
   }
 

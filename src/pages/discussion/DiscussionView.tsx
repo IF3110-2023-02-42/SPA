@@ -5,6 +5,7 @@ import api from "../../utils/api";
 import ElementDiscussion, { ElementDiscussionProps } from "../../components/ElementDiscussion";
 import ElementDiscussionComment, { ElementDiscussionCommentProps } from "../../components/ElementDiscussionComment";
 import NavbarLayout from "../../layout/NavbarLayout";
+import toast from "react-hot-toast";
 
 const DiscussionView = () => {
   
@@ -37,9 +38,11 @@ const DiscussionView = () => {
     )
     if (response.data.message==="OK"){
       console.log("Data:", response.data.data);
+      toast.success("Berhasil menambahkan komentar")
       setCommentList((prevCommentList) => [...prevCommentList, response.data.data])
     } else {
-      console.log("Error add comment:");
+      console.log("Error add comment");
+      toast.error("Error adding comment");
     }
 
   };
@@ -63,6 +66,7 @@ const DiscussionView = () => {
 
       } catch (error) {
         console.log("Error fetching discussion data:", error);
+        toast.error("Error fetching discussion data");
       }
     };
     fetchData();
@@ -70,7 +74,7 @@ const DiscussionView = () => {
 
   const [commentList, setCommentList] = useState <ElementDiscussionCommentProps[]>([]);
 
-    useEffect(() => {
+  useEffect(() => {
       const fetchData = async() => {
         try {
           const response = await api.get(`discussion_view/comment/${id_diskusi}`,
@@ -79,11 +83,12 @@ const DiscussionView = () => {
               accessToken : sessionStorage.getItem("accessToken"),
             }
           });
-  
+          
           console.log("Data:", response.data.data);
           setCommentList(response.data.data);
         } catch (error) {
           console.log("Error fetching data:", error);
+          toast.error("Error fetching comments data");
         }
       };
       fetchData();
