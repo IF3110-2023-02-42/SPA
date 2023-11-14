@@ -17,7 +17,7 @@ interface AddNewDiscussionProps {
     addDiscussion: (discussion: Discussion) => void,
   }
 export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDiscussionProps) {
-    const [uraianInput, setUraianInput] = useState<string>('Type Something');
+    const [uraianInput, setUraianInput] = useState<string>('');
     const [judulInput, setJudulInput] = useState<string>(''); 
     const [keywordsInput, setKeywordsInput] = useState<string>('');
 
@@ -41,7 +41,7 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
     
     const submitNewDiscussion = async (judul : string,  content : string, keywords : string)=>{
         // Get another data
-        let author = 'Fadhil'; // Ambil dari session nanti
+        let author = sessionStorage.getItem("username");
         let numOfComment = 0;
         // Add new discussion to REST
         let newData= {
