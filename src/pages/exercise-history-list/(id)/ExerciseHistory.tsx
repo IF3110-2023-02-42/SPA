@@ -23,7 +23,7 @@ type ExerciseHistoryData = {
 };
 
 // dummy
-const ID_Pengguna = 2;
+const ID_Pengguna = 1;
 // dummy
 
 const ExerciseHistory = () => {

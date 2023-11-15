@@ -23,14 +23,7 @@ const ElementExerciseQAdmin = ({
     handleOptionChange,
 }: ElementExerciseQAdmin) => {
     const handleDelete = async (id_soal: string) => {
-      const newData = {
-        id_soal: id_soal,
-      };
-      const response = await api.post("exercise/delete/"+id_soal, newData, {
-        headers : {
-          accessToken : sessionStorage.getItem("accessToken"),
-        }
-      });
+      const response = await api.get("exercise/delete/"+id_soal);
       console.log(response.data);
       if (response.data.message == "OK"){
         toast.success("Berhasil menghapus pertanyaan");
