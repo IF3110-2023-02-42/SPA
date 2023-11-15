@@ -1,3 +1,5 @@
+import api from '../utils/api';
+import toast from 'react-hot-toast';
 
 type ElementExerciseQAdmin = {
     id_soal: string;
@@ -20,6 +22,24 @@ const ElementExerciseQAdmin = ({
     selectedOption,
     handleOptionChange,
 }: ElementExerciseQAdmin) => {
+    const handleDelete = async (id_soal: string) => {
+      const newData = {
+        id_soal: id_soal,
+      };
+      const response = await api.post("exercise/delete/"+id_soal, newData, {
+        headers : {
+          accessToken : sessionStorage.getItem("accessToken"),
+        }
+      });
+      console.log(response.data);
+      if (response.data.message == "OK"){
+        toast.success("Berhasil menghapus pertanyaan");
+      }
+      else{
+        toast.error("Gagal menghapus pertanyaan");
+      }
+    }
+
     const generateOptions = (option: string) =>{
         return (
             <div className="flex flex-row justify-start items-center gap-2 ml-2">
@@ -43,7 +63,7 @@ const ElementExerciseQAdmin = ({
             {generateOptions(jawaban_salah2)}
             {generateOptions(jawaban_salah3)}
           </div>
-          <button className="bg-[#dc2626] text-white p-[1%] ml-[45%] rounded-[15px] hover:scale-[110%] active:bg-[#991b1b]">Delete</button>
+          <button onClick={()=>handleDelete(id_soal)} className="bg-[#dc2626] text-white p-[1%] ml-[45%] rounded-[15px] hover:scale-[110%] active:bg-[#991b1b]">Delete</button>
         </div>
       );
 };
