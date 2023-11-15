@@ -18,27 +18,20 @@ const ElementDiscussionComment = ({
     jumlah_downvote,
 }: ElementDiscussionCommentProps) => {
     const handleUpvote = async () => {
-        console.log("up");
-        const data = {
-            id_komentar: id_komentar,
-        }
-
-        const response = await api.post("/comment/upvote", data, {});
-        console.log(response);
-        if (response.data.message == "OK"){
+        console.log("up", id_komentar);
+        try{
+            const response = await api.get("/discussion_view/comment/upvote/"+id_komentar);
+            console.log(response);
             console.log("Submitted");
         }
-        else{
-            console.log("Failed");
+        catch(error){
+            console.log("Error: ", error);
         }
+    
     }
     const handleDownvote = async () => {
-        console.log("down");
-        const data = {
-            id_komentar: id_komentar,
-        }
-
-        const response = await api.post("/comment/downvote", data, {});
+        console.log("down",id_komentar);
+        const response = await api.get("/discussion_view/comment/downvote/"+id_komentar);
         console.log(response);
         if (response.data.message == "OK"){
             console.log("Submitted");
@@ -65,7 +58,7 @@ const ElementDiscussionComment = ({
                 <div className="flex space-x-1 items-center">
                     <button className="hover:scale-105 text-purpleBg font-bold  transition duration-300 ease-in-out"
                     key={id_komentar}
-                    onClick={()=>handleUpvote}>
+                    onClick={handleUpvote}>
                         ∧
                     </button>
                     <p>{jumlah_upvote}</p>
@@ -73,7 +66,7 @@ const ElementDiscussionComment = ({
                 <div className="flex space-x-1 items-center">
                     <button className="hover:scale-105 text-purpleBg font-bold  transition duration-300 ease-in-out"
                     key={id_komentar}
-                    onClick={()=>handleDownvote}>
+                    onClick={handleDownvote}>
                         ∨
                     </button>
                     <p>{jumlah_downvote}</p>
