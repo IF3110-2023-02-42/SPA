@@ -5,11 +5,11 @@ import {useEffect} from 'react'
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
 interface Verification {
-  id: string,
+  ID_Pengguna: string,
   nama: string,
   email: string,
   tanggalPengajuan: string,
-  status: string
+  verificationStatus: string
 }
 
 
@@ -52,15 +52,14 @@ export default function Verification(){
   
   function modifyCard(id:string, status:string){
     const newVerificationCards = verificationCards.map(card => ({ ...card }));
-    const indexOfCardToModify = newVerificationCards.findIndex(card => card.id === id);
+    const indexOfCardToModify = newVerificationCards.findIndex(card => card.ID_Pengguna === id);
     if (indexOfCardToModify !== -1) {
-      newVerificationCards[indexOfCardToModify].status = status;
+      newVerificationCards[indexOfCardToModify].verificationStatus = status;
 
       setVerificationCards(newVerificationCards);
     }
   }
   
-
   async function acceptRequest(id:string){
     const response = await changeStatusToDatabase(id, "accepted");
     // Jika berhasil commit ke database tampilannya bisa diubah
@@ -85,6 +84,15 @@ export default function Verification(){
     }
   }
   
+  function formatDate(date:string){
+    let dateList = date.split('-');
+    // let temp = dateList[0];
+    // dateList[0] = dateList[2];
+    // dateList[2] = temp;
+    [dateList[0], dateList[2]] = [dateList[2], dateList[0] ]
+    return dateList.join('-');
+  }
+
   return (
     <NavbarLayout>
       <div className="bg-creamBg z-1 min-h-screen">
@@ -94,12 +102,12 @@ export default function Verification(){
             <div className="w-full flex flex-col items-center pb-5 overflow-hidden"> 
                 {verificationCards.map((verification)=> (
                   <VerificationCard
-                    key= {verification.id}
-                    id={verification.id}
+                    key= {verification.ID_Pengguna}
+                    id={verification.ID_Pengguna}
                     nama={verification.nama}
                     email={verification.email}
-                    tanggalPengajuan={verification.tanggalPengajuan}
-                    status={verification.status}
+                    tanggalPengajuan={formatDate(verification.tanggalPengajuan.split(" ")[0])}
+                    status={verification.verificationStatus}
                     acceptRequestHandler= {acceptRequest}
                     rejectRequestHandler= {rejectRequest}
                   />
