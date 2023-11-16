@@ -107,11 +107,21 @@ const DiscussionView = () => {
               jumlah_komentar = {detail.jumlah_komentar}
               keywords={detail.keywords}
             />
-            <div className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
+            <form onSubmit={()=>sendComment(commentInput)} method="POST" className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
                 <p className="font-semibold text-xl">Add new comment</p>
-                <input type="text" className="w-full p-1 border border-purpleBg" onChange={handleCommentChange} value={commentInput} placeholder="Type Something"></input>
-                <button className="self-end bg-purpleBg text-white p-[1%] rounded-[15px] hover:scale-[110%] active:bg-[#30123f]" onClick={()=>sendComment(commentInput)}>Send</button>
-            </div>
+                <input type="text" 
+                  className="w-full p-1 border border-purpleBg" 
+                  onChange={handleCommentChange} 
+                  value={commentInput} 
+                  placeholder="Type Something"
+                  required
+                />
+                
+                <button type="submit" 
+                  className="self-end bg-purpleBg text-white p-[1%] rounded-[15px] hover:scale-[110%] active:bg-[#30123f]" >
+                    Send
+                </button>
+            </form>
             {commentList && commentList.map((comment) => (
                 <ElementDiscussionComment key={comment.id_komentar} {...comment} />
               ))}
