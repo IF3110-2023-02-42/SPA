@@ -50,9 +50,14 @@ export default function VerificationCard({id, nama, email, tanggalPengajuan, sta
     }
   
     { (status==="rejected") &&
+      <>
         <div className="flex">
           <p className="font-bold text-red-400">Ditolak</p>
-      </div>
+        </div>
+        <div className="flex">
+          <button onClick={() => cancelVerificationHandler(id)} className="bg-red-600 text-white hover:opacity-90 p-1 rounded-md">Cancel</button>          
+        </div>
+      </>
     }
   
   </div>
