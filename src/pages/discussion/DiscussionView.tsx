@@ -123,7 +123,12 @@ const DiscussionView = () => {
                 </button>
             </form>
             {commentList && commentList.map((comment) => (
-                <ElementDiscussionComment key={comment.id_komentar} {...comment} />
+                <ElementDiscussionComment key={comment.id_komentar}
+                  id_komentar={comment.id_komentar}
+                  penulis={comment.penulis}
+                  updated_at={comment.updated_at}
+                  konten={comment.konten}
+                 />
               ))}
           </div>
         </div>)
