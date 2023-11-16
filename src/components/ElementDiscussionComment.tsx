@@ -1,12 +1,11 @@
 import api from "../utils/api";
+import { useState, useEffect} from 'react';
 
 export type ElementDiscussionCommentProps = {
     id_komentar: string,
     penulis: string,
     updated_at: number,
     konten: string,
-    jumlah_upvote: number,
-    jumlah_downvote: number,
 }
 
 const ElementDiscussionComment = ({
@@ -14,30 +13,81 @@ const ElementDiscussionComment = ({
     penulis,
     updated_at,
     konten,
-    jumlah_upvote,
-    jumlah_downvote,
 }: ElementDiscussionCommentProps) => {
+    // const id_pengguna = sessionStorage.getItem("ID_Pengguna");
+    const id_pengguna = 1;
+    const [upvoteDisabled, setUpvoteDisabled] = useState(false);
+    const [downvoteDisabled, setDownvoteDisabled] = useState(false);
+    
+    async function confirmVote(){
+        try{
+            const response = await api.get("/discussion_view/comment/confirmvote/"+id_komentar+"/"+id_pengguna);
+            console.log(response.data.data);
+            if (response.data.data.Is_upvote == "-1"){
+                setUpvoteDisabled(false);
+                setDownvoteDisabled(false);
+            }
+            else{
+                if (response.data.data.Is_upvote == "0"){
+                    setUpvoteDisabled(false);
+                    setDownvoteDisabled(true);
+                }
+                else{
+                    setUpvoteDisabled(true);
+                    setDownvoteDisabled(false);
+                }
+            }
+        } catch(error){
+            console.log("error:", error);
+        }
+    }
+    useEffect(() => {
+        confirmVote()
+    })
+
+    const [upvote, setUpvote] = useState(0);
+    const [downvote, setDownvote] = useState(0);
+
+    async function getVote(){
+        try{
+            const response = await api.get("/discussion_view/comment/getvote/"+id_komentar);
+            console.log(response.data.data)
+            console.log("upvote:", response.data.data.Jumlah_Upvote)
+            console.log("downvote:", response.data.data.Jumlah_Downvote)
+            setUpvote(response.data.data.Jumlah_Upvote)
+            setDownvote(response.data.data.Jumlah_Downvote);
+        } catch(error){
+            console.log("error:", error);
+        }
+    }
+    useEffect(() => {
+        getVote()
+    })
+
     const handleUpvote = async () => {
         console.log("up", id_komentar);
+        // setUpvoteDisabled(true);
         try{
-            const response = await api.get("/discussion_view/comment/upvote/"+id_komentar);
+            const response = await api.get("/discussion_view/comment/upvote/"+id_komentar+"/"+id_pengguna);
             console.log(response);
             console.log("Submitted");
+            setUpvote(upvote+1);
         }
         catch(error){
             console.log("Error: ", error);
         }
-    
+        
     }
     const handleDownvote = async () => {
         console.log("down",id_komentar);
-        const response = await api.get("/discussion_view/comment/downvote/"+id_komentar);
-        console.log(response);
-        if (response.data.message == "OK"){
-            console.log("Submitted");
+        // setDownvoteDisabled(true);
+        try{
+            const response = await api.get("/discussion_view/comment/downvote/"+id_komentar+"/"+id_pengguna);
+            console.log(response);
+            setDownvote(downvote+1);
         }
-        else{
-            console.log("Failed");
+        catch(error){
+            console.log("Error: ", error);
         }
     }
     return (
@@ -58,18 +108,20 @@ const ElementDiscussionComment = ({
                 <div className="flex space-x-1 items-center">
                     <button className="hover:scale-105 text-purpleBg font-bold  transition duration-300 ease-in-out"
                     key={id_komentar}
-                    onClick={handleUpvote}>
+                    onClick={handleUpvote}
+                    disabled={upvoteDisabled}>
                         ∧
                     </button>
-                    <p>{jumlah_upvote}</p>
+                    <p>{upvote}</p>
                 </div>
                 <div className="flex space-x-1 items-center">
                     <button className="hover:scale-105 text-purpleBg font-bold  transition duration-300 ease-in-out"
                     key={id_komentar}
-                    onClick={handleDownvote}>
+                    onClick={handleDownvote}
+                    disabled={downvoteDisabled}>
                         ∨
                     </button>
-                    <p>{jumlah_downvote}</p>
+                    <p>{downvote}</p>
                 </div>
             </div>
         </div>
