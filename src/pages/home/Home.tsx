@@ -3,7 +3,7 @@ import { Discussion } from "../../components/AddNewDiscussion";
 import { FaPlus} from 'react-icons/fa';
 import { useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
-import api from "../../utils/api";
+import api, { headers } from "../../utils/api";
 import NavbarLayout from "../../layout/NavbarLayout";
 import  DiscussionCard  from "../../components/CardDiscussion";
 import toast from "react-hot-toast";
@@ -11,6 +11,8 @@ import { getUserStatus } from "../../utils/user";
 
 const Home = () => {
   const [modal, setModal] = useState(false);
+  const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
   const [discussionCards, setDiscussionCards] = useState<Discussion[]>([]);
   const [verified, setVerified] = useState<boolean | null>();
   const navigate = useNavigate();
@@ -18,22 +20,58 @@ const Home = () => {
   async function getDiscussionsData(){
     if (!sessionStorage.getItem("accessToken")){
       navigate("/login");
+      return ;
     }
 
     // Get Discussion Data to REST webservice
-    const response = await api.get("/discussion", {
-      headers : {
-        accessToken : sessionStorage.getItem("accessToken"),
-      }
-    });
-    if (response.data.message=="OK"){
+    try{
+      const response = await api.get("/discussion", {
+        headers : headers
+      });
+
       console.log(response.data.data)
       setDiscussionCards(response.data.data);
-    } else{
-      console.log(response.data);
+    } catch(error){
+      console.log("Error fetching data:", error);
       toast.error("Failed to fetch discussion data"); 
+      setDiscussionCards([]);
     }
   }
+
+  async function getDiscussionsDataPerPage(){
+    if (!sessionStorage.getItem("accessToken")){
+      navigate("/login");
+      return ;
+    }
+
+    // Get Discussion Data on Specific page to REST
+    try{
+      const response = await api.get(`/discussion/page/${page}`, {
+        headers : headers
+      });
+      console.log(response.data.data)
+      setDiscussionCards(response.data.data);
+
+    } catch(error){
+      console.log("Error fetching data:", error);
+      toast.error("Failed to fetch discussion data"); 
+      setDiscussionCards([]);
+    }
+  }
+
+  async function getMaxPage() {
+    try{
+      const response = await api.get("/discussion/maxPage", {headers:headers});
+      console.log(response.data.data);
+      setMaxPage(parseInt(response.data.data,10));
+      
+    } catch(error){
+      console.log("Error fetching data:", error);
+      setMaxPage(1);
+    }
+
+  }
+
 
   useEffect(()=>{
     getDiscussionsData()
