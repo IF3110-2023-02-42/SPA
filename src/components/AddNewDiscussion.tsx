@@ -96,32 +96,39 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
                     />
                 </div>
                 <h3 className="font-bold text-2xl"> Buat Diskusi Baru </h3>
-                <form className="pt-3">
+                <form className="pt-3" method='POST' onSubmit={()=>(submitNewDiscussion(judulInput, uraianInput, keywordsInput))}>
                     <div className="pb-5">
                         <h4 className="font-bold text-xl">Judul Pertanyaan</h4>
                         <input type="text" 
                             className="mt-2 w-full border border-gray-400 rounded-md p-1"
                             value={judulInput} 
                             onChange={handleJudulChange}
-                            placeholder="Tulis judul pertanyaan Anda dengan singkat" />
+                            placeholder="Tulis judul pertanyaan Anda dengan singkat" 
+                            required    
+                        />
+                            
                     </div>
                     <div className="pb-5">
                         <h4 className="font-bold text-xl">Uraian Pertanyaan</h4>
-                        <textarea value={uraianInput} onChange={handleUraianChange} className="mt-2 w-full p-1 rounded-md border border-gray-400 resize-none" />
+                        <textarea className="mt-2 w-full p-1 rounded-md border border-gray-400 resize-none" value={uraianInput} onChange={handleUraianChange} required />
                         <p>Uraikan pertanyaan Anda lebih panjang dan jelas pada bagian ini.</p>
                     </div>
                     <div className="pb-5">
                         <h4 className='font-bold text-xl'>Kata Kunci</h4>
-                        <input type="text" value={keywordsInput} onChange={handleKeywordsChange} className="mt-2 w-full border border-gray-400 rounded-md p-1" />
+                        <input type="text" 
+                            className="mt-2 w-full border border-gray-400 rounded-md p-1" 
+                            value={keywordsInput} 
+                            onChange={handleKeywordsChange}  
+                            required
+                        />
                         <p>Tuliskan beberapa kata kunci pertanyaan Anda di sini dengan tanda koma sebagai pemisah. Maksimal 6 kata kunci yang bisa ditambahkan.</p>
                         <p>Contoh: percepatan,gravitasi</p>
                     </div>
 
                     <div className='flex justify-end w-full'>
-                        <p className='bg-purpleBg text-white p-2 rounded-md hover:cursor-pointer hover:opacity-90' 
-                            onClick={()=>(submitNewDiscussion(judulInput, uraianInput, keywordsInput))}>
-                            Buat Diskusi Baru
-                        </p>
+                        <button type='submit'className='bg-purpleBg text-white p-2 rounded-md hover:cursor-pointer hover:opacity-90'>
+                                Buat Diskusi Baru
+                        </button>
                     </div>
                 </form>
             </div>

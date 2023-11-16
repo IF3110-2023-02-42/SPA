@@ -86,9 +86,6 @@ export default function Verification(){
   
   function formatDate(date:string){
     let dateList = date.split('-');
-    // let temp = dateList[0];
-    // dateList[0] = dateList[2];
-    // dateList[2] = temp;
     [dateList[0], dateList[2]] = [dateList[2], dateList[0] ]
     return dateList.join('-');
   }
