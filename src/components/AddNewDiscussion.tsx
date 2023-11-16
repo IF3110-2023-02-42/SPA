@@ -96,7 +96,7 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
                     />
                 </div>
                 <h3 className="font-bold text-2xl"> Buat Diskusi Baru </h3>
-                <form className="pt-3 w-4/5" method='POST' onSubmit={()=>(submitNewDiscussion(judulInput, uraianInput, keywordsInput))}>
+                <form className="pt-3 w-4/5" method='POST' onSubmit={(e)=>(e.preventDefault(), submitNewDiscussion(judulInput, uraianInput, keywordsInput))}>
                     <div className="pb-5">
                         <h4 className="font-bold text-xl">Judul Pertanyaan</h4>
                         <input type="text" 

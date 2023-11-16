@@ -11,34 +11,13 @@ import { getUserStatus } from "../../utils/user";
 
 const Home = () => {
   const [modal, setModal] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
   const [maxPage, setMaxPage] = useState(1);
   const [discussionCards, setDiscussionCards] = useState<Discussion[]>([]);
   const [verified, setVerified] = useState<boolean | null>();
   const navigate = useNavigate();
   
-  async function getDiscussionsData(){
-    if (!sessionStorage.getItem("accessToken")){
-      navigate("/login");
-      return ;
-    }
-
-    // Get Discussion Data to REST webservice
-    try{
-      const response = await api.get("/discussion", {
-        headers : headers
-      });
-
-      console.log(response.data.data)
-      setDiscussionCards(response.data.data);
-    } catch(error){
-      console.log("Error fetching data:", error);
-      toast.error("Failed to fetch discussion data"); 
-      setDiscussionCards([]);
-    }
-  }
-
-  async function getDiscussionsDataPerPage(){
+  async function getDiscussionsDataPage(){
     if (!sessionStorage.getItem("accessToken")){
       navigate("/login");
       return ;
@@ -46,8 +25,12 @@ const Home = () => {
 
     // Get Discussion Data on Specific page to REST
     try{
-      const response = await api.get(`/discussion/page/${page}`, {
-        headers : headers
+      const response = await api.get(`/discussion/page`, {
+        params : {
+          pageNumber: page,
+          pageSize: 3,
+        },
+        headers : headers,
       });
       console.log(response.data.data)
       setDiscussionCards(response.data.data);
@@ -74,8 +57,8 @@ const Home = () => {
 
 
   useEffect(()=>{
-    getDiscussionsData()
-  }, [])
+    getDiscussionsDataPage();
+  }, [discussionCards])
 
   function toggleModal(){
     setModal(!modal);
@@ -109,7 +92,7 @@ const Home = () => {
           <div className="w-full relative flex flex-col items-center justify-center py-5">
             <h1 className="text-4xl font-bold">Discussions</h1>
             <div className="w-full pb-5 flex flex-col items-center"> 
-              {(discussionCards.length != 0) ? (discussionCards.map((discussion) => (
+              {(discussionCards.length != 0) ? (discussionCards.reverse().map((discussion) => (
                 <DiscussionCard
                     key={discussion.id}
                     id={discussion.id}
