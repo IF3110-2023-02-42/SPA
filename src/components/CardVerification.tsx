@@ -10,10 +10,11 @@ type VerificationCardProps = {
     status: string,
     acceptRequestHandler: (id:string) => void,
     rejectRequestHandler: (id:string) => void,
+    cancelVerificationHandler: (id:string) => void,
   }
 
 
-export default function VerificationCard({id, nama, email, tanggalPengajuan, status, acceptRequestHandler, rejectRequestHandler}: VerificationCardProps){
+export default function VerificationCard({id, nama, email, tanggalPengajuan, status, acceptRequestHandler, rejectRequestHandler, cancelVerificationHandler}: VerificationCardProps){
     return <div className="w-3/5 mt-5 p-5 flex space-x-5 items-center shadow-md rounded-3xl  bg-white">
     <div className="userprofile">
         <img src={profileImage} alt="User Profile Image" className="w-20 h-20 rounded-full"/>
@@ -38,9 +39,14 @@ export default function VerificationCard({id, nama, email, tanggalPengajuan, sta
     }
   
     { (status==="accepted") &&
-        <div className="flex">
-            <p className="font-bold text-green-400">Disetujui</p>
-        </div>
+        <>
+          <div className="flex">
+              <p className="font-bold text-green-400">Disetujui</p>
+          </div>
+          <div className="flex">
+              <button onClick={() => cancelVerificationHandler(id)} className="bg-red-600 text-white hover:opacity-90 p-1 rounded-md">Cancel</button>
+          </div>
+        </>
     }
   
     { (status==="rejected") &&

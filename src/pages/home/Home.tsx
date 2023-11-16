@@ -7,10 +7,12 @@ import api from "../../utils/api";
 import NavbarLayout from "../../layout/NavbarLayout";
 import  DiscussionCard  from "../../components/CardDiscussion";
 import toast from "react-hot-toast";
+import { getUserStatus } from "../../utils/user";
 
 const Home = () => {
   const [modal, setModal] = useState(false);
-  const [discussionCards, setDiscussionCards] = useState<Discussion[]>([])
+  const [discussionCards, setDiscussionCards] = useState<Discussion[]>([]);
+  const [verified, setVerified] = useState<boolean | null>();
   const navigate = useNavigate();
   
   async function getDiscussionsData(){
@@ -37,10 +39,20 @@ const Home = () => {
     getDiscussionsData()
   }, [])
 
-  const toggleModal = () => {
+  function toggleModal(){
     setModal(!modal);
     console.log(modal);
   };
+
+  async function getStatus(){
+    const status = await getUserStatus(sessionStorage.getItem("ID_Pengguna"));
+    setVerified(status);
+  }
+
+  useEffect(()=> {
+    getStatus();
+  }, [])
+
 
   function addDiscussion(newDiscussion:Discussion){
     setDiscussionCards((prevDiscussions)=> [...prevDiscussions, newDiscussion])
@@ -75,6 +87,7 @@ const Home = () => {
                 (<div className="py-10"> Not Found </div>)
               }
           </div>
+            {verified && 
             <div className="fixed w-full py-10 pr-20 flex justify-end bottom-0 z-20">
               <FaPlus 
                 className="text-creamBg shadow-md bg-purpleBg opacity-100 transition duration-300 ease-in-out hover:scale-105 hover:cursor-pointer mr-2 p-1.5 rounded-md"  
@@ -82,6 +95,7 @@ const Home = () => {
                 onClick = {toggleModal}
                 />
             </div>
+            }
           </div>
         </div>
       </div>

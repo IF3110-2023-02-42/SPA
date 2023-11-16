@@ -83,6 +83,18 @@ export default function Verification(){
       toast.error('Request verifikasi gagal ditolak');
     }
   }
+
+  async function cancelVerification(id:string){
+    const response = await changeStatusToDatabase(id, "unverified");
+    // Jika berhasil commit ke database tampilannya bisa diubah
+    if (response.data.message === "OK"){
+      console.log(response.data.data);
+      modifyCard(id,"unverified");
+      toast.success('Request verifikasi berhasil ditolak');
+    } else {
+      toast.error('Request verifikasi gagal ditolak');
+    }    
+  }
   
   function formatDate(date:string){
     let dateList = date.split('-');
@@ -107,6 +119,7 @@ export default function Verification(){
                     status={verification.verificationStatus}
                     acceptRequestHandler= {acceptRequest}
                     rejectRequestHandler= {rejectRequest}
+                    cancelVerificationHandler={cancelVerification}
                   />
                 ))}
             </div>

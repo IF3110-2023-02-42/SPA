@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../utils/api";
+import { getUserStatus } from "../../utils/user";
 
 import ElementDiscussion, { ElementDiscussionProps } from "../../components/ElementDiscussion";
 import ElementDiscussionComment, { ElementDiscussionCommentProps } from "../../components/ElementDiscussionComment";
@@ -11,40 +12,48 @@ const DiscussionView = () => {
   
   const [commentInput, setCommentInput] = useState<string>('');
   const {id_diskusi} = useParams();
-
+  const [verified, setVerified] = useState<boolean | null>();
 
   const handleCommentChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCommentInput(event.target.value);
   };
 
-  const sendComment = async (konten_input: string) => {
-    const penulis = sessionStorage.getItem("username");
-    const konten = konten_input;
-    const jumlah_upvote = 0;
-    const jumlah_downvote = 0;
-    
-    const response = await api.post("discussion_view/comment/add", 
-      {
-        id_diskusi: id_diskusi,
-        penulis: penulis,
-        konten: konten,
-        jumlah_upvote: jumlah_upvote,
-        jumlah_downvote: jumlah_downvote
-      }, {
-        headers : {
-          accessToken : sessionStorage.getItem("accessToken"),
-        }
-      }
-    )
-    if (response.data.message==="OK"){
-      console.log("Data:", response.data.data);
-      toast.success("Berhasil menambahkan komentar")
-      setCommentList((prevCommentList) => [...prevCommentList, response.data.data])
-    } else {
-      console.log("Error add comment");
-      toast.error("Error adding comment");
-    }
+  async function getStatus(){
+    const status = await getUserStatus(sessionStorage.getItem("ID_Pengguna"));
+    setVerified(status);
+  }
 
+  useEffect(()=> {
+    getStatus();
+  }, [])
+
+  const sendComment = async (konten_input: string) => {
+        const penulis = sessionStorage.getItem("username");
+        const konten = konten_input;
+        const jumlah_upvote = 0;
+        const jumlah_downvote = 0;
+        
+        const response = await api.post("discussion_view/comment/add", 
+          {
+            id_diskusi: id_diskusi,
+            penulis: penulis,
+            konten: konten,
+            jumlah_upvote: jumlah_upvote,
+            jumlah_downvote: jumlah_downvote
+          }, {
+            headers : {
+              accessToken : sessionStorage.getItem("accessToken"),
+            }
+          }
+        )
+        if (response.data.message==="OK"){
+          console.log("Data:", response.data.data);
+          toast.success("Berhasil menambahkan komentar")
+          setCommentList((prevCommentList) => [...prevCommentList, response.data.data])
+        } else {
+          console.log("Error add comment");
+          toast.error("Error adding comment");
+        }
   };
 
   const [detail, setDetail] = useState <ElementDiscussionProps | null>(null);
@@ -107,23 +116,26 @@ const DiscussionView = () => {
               jumlah_komentar = {detail.jumlah_komentar}
               keywords={detail.keywords}
             />
-            <form onSubmit={()=>sendComment(commentInput)} method="POST" className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
-                <p className="font-semibold text-xl">Add new comment</p>
-                <input type="text" 
-                  className="w-full p-1 border border-purpleBg" 
-                  onChange={handleCommentChange} 
-                  value={commentInput} 
-                  placeholder="Type Something"
-                  required
-                />
-                
-                <button type="submit" 
-                  className="self-end bg-purpleBg text-white p-[1%] rounded-[15px] hover:scale-[110%] active:bg-[#30123f]" >
-                    Send
-                </button>
-            </form>
+            {
+              verified &&
+              <form onSubmit={() => {sendComment(commentInput);}} method="POST" className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
+                  <p className="font-semibold text-xl">Add new comment</p>
+                  <input type="text" 
+                    className="w-full p-1 border border-purpleBg" 
+                    onChange={handleCommentChange} 
+                    value={commentInput} 
+                    placeholder="Type Something"
+                    required
+                  />
+                  
+                  <button type="submit" 
+                    className="self-end bg-purpleBg text-white p-[1%] rounded-[15px] hover:scale-[110%] active:bg-[#30123f]" >
+                      Send
+                  </button>
+              </form>
+            }
             {commentList && commentList.map((comment) => (
-                <ElementDiscussionComment key={comment.id_komentar} {...comment} />
+              <ElementDiscussionComment key={comment.id_komentar} {...comment} />
               ))}
           </div>
         </div>)

@@ -2,7 +2,6 @@ import { useState, ChangeEvent } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
-
 export interface Discussion{
     id: string,
     judul : string,
@@ -41,47 +40,48 @@ export default function AddNewDiscussion({toggleModal, addDiscussion}: AddNewDis
       };
     
     const submitNewDiscussion = async (judul : string,  content : string, keywords : string)=>{
-        // Get another data
-        let author = sessionStorage.getItem("username");
-        let numOfComment = 0;
-        // Add new discussion to REST
-        let newData= {
-            judul: judul,
-            author: author,
-            content: content,
-            keywords: keywords,
-            numOfComment: numOfComment   
-        };
-        const response = await api.post("/discussion/add", newData, {
-            headers : {
-                accessToken : sessionStorage.getItem("accessToken"),
-              }
-        });
-
-        console.log(response.data);
-
-        if (response.data.message=="OK"){
-            console.log("add Discussion Success");
-            toast.success("Berhasil menambahkan diskusi");
-
-            let retrieveData = response.data.data;
-    
-            let newDiscussion: Discussion = {
-                id:retrieveData.id, 
-                judul:retrieveData.judul, 
-                dateCreated:retrieveData.dateCreated, 
-                author:retrieveData.author, 
-                content:(retrieveData.content.length > 300) ? (retrieveData.content.slice(0,297)+"..."):retrieveData.content, 
-                numOfComment:retrieveData.numOfComment,
-                keywords:retrieveData.keywords
+            // Get another data
+            let author = sessionStorage.getItem("username");
+            let numOfComment = 0;
+            // Add new discussion to REST
+            let newData= {
+                judul: judul,
+                author: author,
+                content: content,
+                keywords: keywords,
+                numOfComment: numOfComment   
             };
+            const response = await api.post("/discussion/add", newData, {
+                headers : {
+                    accessToken : sessionStorage.getItem("accessToken"),
+                  }
+            });
+    
+            console.log(response.data);
+    
+            if (response.data.message=="OK"){
+                console.log("add Discussion Success");
+                toast.success("Berhasil menambahkan diskusi");
+    
+                let retrieveData = response.data.data;
+        
+                let newDiscussion: Discussion = {
+                    id:retrieveData.id, 
+                    judul:retrieveData.judul, 
+                    dateCreated:retrieveData.dateCreated, 
+                    author:retrieveData.author, 
+                    content:(retrieveData.content.length > 300) ? (retrieveData.content.slice(0,297)+"..."):retrieveData.content, 
+                    numOfComment:retrieveData.numOfComment,
+                    keywords:retrieveData.keywords
+                };
+    
+                addDiscussion(newDiscussion);
+                toggleModal();
+            } else {
+                console.log("add Discussion Failed");
+                toast.error("Failed to add Discussion");
+            }
 
-            addDiscussion(newDiscussion);
-            toggleModal();
-        } else {
-            console.log("add Discussion Failed");
-            toast.error("Failed to add Discussion");
-        }
     }
     
 
