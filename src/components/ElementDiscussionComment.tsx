@@ -1,3 +1,5 @@
+import api from "../utils/api";
+
 export type ElementDiscussionCommentProps = {
     id_komentar: string,
     penulis: string,
@@ -8,12 +10,36 @@ export type ElementDiscussionCommentProps = {
 }
 
 const ElementDiscussionComment = ({
+    id_komentar,
     penulis,
     updated_at,
     konten,
     jumlah_upvote,
     jumlah_downvote,
 }: ElementDiscussionCommentProps) => {
+    const handleUpvote = async () => {
+        console.log("up", id_komentar);
+        try{
+            const response = await api.get("/discussion_view/comment/upvote/"+id_komentar);
+            console.log(response);
+            console.log("Submitted");
+        }
+        catch(error){
+            console.log("Error: ", error);
+        }
+    
+    }
+    const handleDownvote = async () => {
+        console.log("down",id_komentar);
+        const response = await api.get("/discussion_view/comment/downvote/"+id_komentar);
+        console.log(response);
+        if (response.data.message == "OK"){
+            console.log("Submitted");
+        }
+        else{
+            console.log("Failed");
+        }
+    }
     return (
         <div className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
             <div className="flex flex-row">
@@ -30,11 +56,19 @@ const ElementDiscussionComment = ({
             <p>{konten}</p>
             <div className="flex items-center space-x-4">
                 <div className="flex space-x-1 items-center">
-                    <button className="hover:scale-105 text-purpleBg font-bold  transition duration-300 ease-in-out">∧</button>
+                    <button className="hover:scale-105 text-purpleBg font-bold  transition duration-300 ease-in-out"
+                    key={id_komentar}
+                    onClick={handleUpvote}>
+                        ∧
+                    </button>
                     <p>{jumlah_upvote}</p>
                 </div>
                 <div className="flex space-x-1 items-center">
-                    <button className="hover:scale-105 text-purpleBg font-bold  transition duration-300 ease-in-out">∨</button>
+                    <button className="hover:scale-105 text-purpleBg font-bold  transition duration-300 ease-in-out"
+                    key={id_komentar}
+                    onClick={handleDownvote}>
+                        ∨
+                    </button>
                     <p>{jumlah_downvote}</p>
                 </div>
             </div>
