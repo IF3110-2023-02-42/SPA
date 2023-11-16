@@ -5,6 +5,7 @@ import Register from "./pages/register/Register";
 import Verification from "./pages/verification/Verification";
 import DiscussionView from "./pages/discussion/DiscussionView";
 import Exercise from "./pages/exercise/Exercise";
+import ExerciseAdmin from "./pages/exercise_admin/ExerciseAdmin";
 import ExerciseHistory from "./pages/exercise-history-list/(id)/ExerciseHistory";
 import ExHistoryList from "./pages/exercise-history-list/ExHistoryList";
 
@@ -37,6 +38,10 @@ export const router = () =>
         {
           path: "/exercise/:id",
           element: <Exercise />,
+        },
+        {
+          path: "/exercise_admin/:id",
+          element: <ExerciseAdmin />,
         },
         {
           path: "/exercise-history",
