@@ -40,7 +40,10 @@ const DiscussionView = () => {
   }, []);
 
   const sendComment = async (konten_input: string) => {
-    const penulis = sessionStorage.getItem("username");
+    let penulis = "ALEX";
+    if (decodedJwt){
+      penulis = decodedJwt.username;
+    }
     const konten = konten_input;
     const jumlah_upvote = 0;
     const jumlah_downvote = 0;
@@ -144,7 +147,7 @@ const DiscussionView = () => {
   useEffect(() => {
     getCommentsDataPage();
     getMaxPage();
-  }, [commentList]);
+  }, []);
 
   return (
     <NavbarLayout>

@@ -12,7 +12,7 @@ import { getDecodedJwt } from "../../utils/jwt";
 
 const Home = () => {
   const [modal, setModal] = useState(false);
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(3);
   const [maxPage, setMaxPage] = useState(1);
   const [discussionCards, setDiscussionCards] = useState<Discussion[]>([]);
   const [verified, setVerified] = useState<boolean | null>();
