@@ -1,27 +1,35 @@
-# React + TypeScript + Vite
+# SPA Web Service
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Web Service pada SPA menyediakan beberapa fitur berikut.
 
-Currently, two official plugins are available:
+### 1. Login
+<img width="960" alt="image" src="https://github.com/IF3110-2023-02-42/SPA/assets/89376200/848627f8-31a0-44cb-91eb-81e5a0d50f6d">
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 2. Home
+<img width="960" alt="image" src="https://github.com/IF3110-2023-02-42/SPA/assets/89376200/ed97a387-25b9-436c-8590-59248750ff5a">
 
-## Expanding the ESLint configuration
+### 3. Discussion view
+<img width="958" alt="image" src="https://github.com/IF3110-2023-02-42/SPA/assets/89376200/9611861a-db8c-44fa-972b-969dcd1c2430">
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### 4. Exercise yang dibuka dari PHP
+<img width="960" alt="image" src="https://github.com/IF3110-2023-02-42/SPA/assets/89376200/2ed2437b-4cd1-4b6e-b105-021d8f0b3ca5">
 
-- Configure the top-level `parserOptions` property like this:
+### 5. CRUD exercise untuk admin
+<img width="960" alt="image" src="https://github.com/IF3110-2023-02-42/SPA/assets/89376200/5a93f548-2438-4839-a359-ad858d1fd989">
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+### 6. Verification
+<img width="960" alt="image" src="https://github.com/IF3110-2023-02-42/SPA/assets/89376200/aceca188-623d-4cd2-9046-b80de55722d4">
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Pembagian Tugas
+Frontend Halaman Login: 13521106
+Backend Halaman Login: 13521106
+Frontend Halaman Home: 13521066
+Backend Halaman Home: 13521066
+Frontend Halaman Discussion View: 13521051
+Backend Halaman Discussion View: 13521051
+Frontend Halaman Exercise: 13521051
+Backend Halaman Exercise: 13521051
+Frontend Halaman Exercise Admin: 13521051
+Backend Halaman Exercise Admin: 13521051
+Frontend Halaman Verification: 13521066
+Backend Halaman Verification: 13521066
