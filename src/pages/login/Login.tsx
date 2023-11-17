@@ -4,6 +4,7 @@ import loginBg from "../../assets/login-bg.png";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
+import { AxiosError } from "axios";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -23,25 +24,18 @@ const Login = () => {
 
   const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const response = await api.post("/user/login", data);
-
-    console.log(response.data);
-
-    if (response.data.message == "OK") {
-      toast.success("test");
-      sessionStorage.setItem("accessToken", response.data.data.accessToken);
-      sessionStorage.setItem("ID_Pengguna", response.data.data.ID_Pengguna);
-      sessionStorage.setItem("username", data.username);
-      sessionStorage.setItem(
-        "verificationStatus",
-        response.data.data.userDataSoap.verificationStatus
-      );
-
-      navigate("/");
-    } else {
-      toast.error("test");
-    }
+    api
+      .post("/user/login", data)
+      .then((res) => {
+        console.log(res);
+        toast.success("Login succesful");
+        sessionStorage.setItem("accessToken", res.data.data.accessToken);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.data);
+      });
   };
 
   return (
