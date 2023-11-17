@@ -2,7 +2,7 @@ import {useState} from 'react';
 import NavbarLayout from "../../layout/NavbarLayout";
 import VerificationCard from '../../components/CardVerification';
 import {useEffect} from 'react'
-import api from '../../utils/api';
+import api, { headers } from '../../utils/api';
 import toast from 'react-hot-toast';
 interface Verification {
   ID_Pengguna: string,
@@ -23,18 +23,14 @@ export default function Verification(){
       newStatus: newStatus,
     }
     const response = await api.put('/verification/updateStatus', data, {
-      headers:{
-        accessToken: sessionStorage.getItem("accessToken"),
-      }
+      headers:headers
     }); 
   
     return response;
   }
   async function getVerificationsData(){
     const response = await api.get('/verification', {
-      headers:{
-        accessToken : sessionStorage.getItem("accessToken"),
-      }      
+      headers:headers
     })
     
     if (response.data.message === "OK"){

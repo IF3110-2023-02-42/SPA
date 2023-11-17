@@ -13,7 +13,7 @@ const Home = () => {
   const [discussionCards, setDiscussionCards] = useState<Discussion[]>([]);
   const navigate = useNavigate();
 
-  async function getDiscussionsData() {
+  async function getDiscussionsDataPage() {
     if (!sessionStorage.getItem("accessToken")) {
       navigate("/login");
     }
@@ -35,12 +35,13 @@ const Home = () => {
 
   useEffect(() => {
     getDiscussionsData();
+    getMaxPage();
   }, []);
 
-  const toggleModal = () => {
+  function toggleModal() {
     setModal(!modal);
     console.log(modal);
-  };
+  }
 
   function addDiscussion(newDiscussion: Discussion) {
     setDiscussionCards((prevDiscussions) => [

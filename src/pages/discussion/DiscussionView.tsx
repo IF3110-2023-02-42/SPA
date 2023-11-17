@@ -7,12 +7,15 @@ import ElementDiscussion, { ElementDiscussionProps } from "../../components/Elem
 import ElementDiscussionComment, { ElementDiscussionCommentProps } from "../../components/ElementDiscussionComment";
 import NavbarLayout from "../../layout/NavbarLayout";
 import toast from "react-hot-toast";
+import { headers } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const DiscussionView = () => {
   
   const [commentInput, setCommentInput] = useState<string>('');
   const {id_diskusi} = useParams();
   const [verified, setVerified] = useState<boolean | null>();
+  const navigate = useNavigate();
 
   const handleCommentChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCommentInput(event.target.value);
@@ -74,34 +77,58 @@ const DiscussionView = () => {
         }
 
       } catch (error) {
-        console.log("Error fetching discussion data:", error);
-        toast.error("Error fetching discussion data");
+        console.log("Error fetching comments data:", error);
+        toast.error("Error fetching comments data");
       }
     };
     fetchData();
   },[]);
 
   const [commentList, setCommentList] = useState <ElementDiscussionCommentProps[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [maxPage, setMaxPage] = useState<number>(1);
 
+  async function getCommentsDataPage(){
+    if (!sessionStorage.getItem("accessToken")){
+      navigate("/login");
+      return ;
+    }
+
+    // Get Discussion Data on Specific page to REST
+    try{
+      const response = await api.get(`/discussion_view/comment/${id_diskusi}/page`, {
+        params : {
+          pageNumber: page,
+          pageSize: 3,
+        },
+        headers : headers,
+      });
+      console.log(response.data.data)
+      setCommentList(response.data.data);
+
+    } catch(error){
+      console.log("Error Comments data:", error);
+      toast.error("Failed to fetch Comments data"); 
+      setCommentList([]);
+    }
+  }
+
+  async function getMaxPage() {
+    try{
+      const response = await api.get(`/discussion_view/comment/${id_diskusi}/maxPage`, {headers:headers});
+      console.log(response.data.data);
+      setMaxPage(parseInt(response.data.data,10));
+      
+    } catch(error){
+      console.log("Error fetching data:", error);
+      setMaxPage(1);
+    }
+
+  }
   useEffect(() => {
-      const fetchData = async() => {
-        try {
-          const response = await api.get(`discussion_view/comment/${id_diskusi}`,
-          {
-            headers : {
-              accessToken : sessionStorage.getItem("accessToken"),
-            }
-          });
-          
-          console.log("Data:", response.data.data);
-          setCommentList(response.data.data);
-        } catch (error) {
-          console.log("Error fetching data:", error);
-          toast.error("Error fetching comments data");
-        }
-      };
-      fetchData();
-    },[]);
+      getCommentsDataPage();
+      getMaxPage();
+    },[commentList]);
 
     return <NavbarLayout>
       {detail ? 
@@ -118,7 +145,7 @@ const DiscussionView = () => {
             />
             {
               verified &&
-              <form onSubmit={() => {sendComment(commentInput);}} method="POST" className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
+              <form onSubmit={(e)=>{e.preventDefault();sendComment(commentInput);}} method="POST" className="flex flex-col justify-start items-start w-full bg-white py-4 px-6 rounded-md gap-4">
                   <p className="font-semibold text-xl">Add new comment</p>
                   <input type="text" 
                     className="w-full p-1 border border-purpleBg" 
