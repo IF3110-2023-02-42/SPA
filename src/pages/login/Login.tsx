@@ -31,6 +31,8 @@ const Login = () => {
     if (response.data.message == "OK") {
       toast.success("test");
       sessionStorage.setItem("accessToken", response.data.data.accessToken);
+      sessionStorage.setItem("ID_Pengguna", response.data.data.ID_Pengguna);
+      sessionStorage.setItem("username", data.username);
       sessionStorage.setItem(
         "verificationStatus",
         response.data.data.userDataSoap.verificationStatus
