@@ -57,7 +57,7 @@ const Home = () => {
   useEffect(() => {
     getDiscussionsDataPage();
     getMaxPage();
-  }, [discussionCards]);
+  }, []);
 
   function toggleModal() {
     setModal(!modal);

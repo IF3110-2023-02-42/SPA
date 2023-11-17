@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import profileImage from "../assets/profile.jpg";
+import { getDecodedJwt } from "../utils/jwt";
 
 interface NavbarRoute {
   path: string;
@@ -7,7 +9,15 @@ interface NavbarRoute {
 }
 
 export default function Navbar() {
-  const role = "user";
+  const [role, setRole] = useState("user");
+
+  useEffect(() => {
+    const tokenPayload = getDecodedJwt();
+    if (tokenPayload) {
+      setRole(tokenPayload.role);
+    }
+  }, []);
+
   const userOption: NavbarRoute[] = [
     {
       path: "/exercise-history",
@@ -20,8 +30,8 @@ export default function Navbar() {
   ];
   const adminOption: NavbarRoute[] = [
     {
-      path: "/request",
-      label: "Request",
+      path: "/verification",
+      label: "Verification",
     },
     {
       path: "/",
@@ -32,7 +42,9 @@ export default function Navbar() {
   const generateLinks = (options: NavbarRoute[]) => {
     return options.map((opt: NavbarRoute) => (
       <Link to={opt.path} key={opt.path}>
-        <label className="hover:cursor-pointer hover:text-black transition duration-300 ease-in-out" >{opt.label}</label>
+        <label className="hover:cursor-pointer hover:text-black transition duration-300 ease-in-out">
+          {opt.label}
+        </label>
       </Link>
     ));
   };
