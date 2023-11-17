@@ -9,31 +9,32 @@ import DiscussionCard from "../../components/CardDiscussion";
 import toast from "react-hot-toast";
 import { getUserStatus } from "../../utils/user";
 import { getDecodedJwt } from "../../utils/jwt";
+import Pagination from "../../components/Pagination";
 
 const Home = () => {
   const [modal, setModal] = useState(false);
-  const [page, setPage] = useState(2);
-  const [maxPage, setMaxPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(4);
   const [discussionCards, setDiscussionCards] = useState<Discussion[]>([]);
   const [verified, setVerified] = useState<boolean | null>();
   const navigate = useNavigate();
+  const decodedJwt = getDecodedJwt();
 
   async function getDiscussionsDataPage() {
-    if (!sessionStorage.getItem("accessToken")) {
+    if (!decodedJwt) {
       navigate("/login");
       return;
     }
-
     // Get Discussion Data on Specific page to REST
     try {
       const response = await api.get(`/discussion/page`, {
         params: {
           pageNumber: page,
-          pageSize: 3,
+          pageSize: 10,
         },
         headers: headers,
       });
-      console.log(response.data.data);
+      console.log("atas", response.data.data);
       setDiscussionCards(response.data.data);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -44,10 +45,10 @@ const Home = () => {
 
   async function getMaxPage() {
     try {
-      const response = await api.get("/discussion/maxPage", {
+      const response = await api.get("/discussion/maxPage/10", {
         headers: headers,
       });
-      console.log(response.data.data);
+      console.log("maxpage", response.data.data);
       setMaxPage(parseInt(response.data.data, 10));
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -59,6 +60,10 @@ const Home = () => {
     getDiscussionsDataPage();
     getMaxPage();
   }, []);
+
+  useEffect(() => {
+    getDiscussionsDataPage();
+  }, [page]);
 
   function toggleModal() {
     setModal(!modal);
@@ -89,6 +94,14 @@ const Home = () => {
   function handleDiscussionCardClick(id: string) {
     navigate(`/discussion_view/${id}`);
   }
+
+  const changePage = (num: number) => {
+    if (!(num < 1 || num > maxPage)) {
+      setPage(num);
+      console.log(num);
+      getDiscussionsDataPage();
+    }
+  };
 
   // Home Page
   return (
@@ -123,6 +136,11 @@ const Home = () => {
               ) : (
                 <div className="py-10"> Not Found </div>
               )}
+              <Pagination
+                maxPage={maxPage}
+                currentPage={page}
+                callback={changePage}
+              />
             </div>
             {verified && (
               <div className="fixed w-full py-10 pr-20 flex justify-end bottom-0 z-20">
