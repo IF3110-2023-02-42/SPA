@@ -21,15 +21,15 @@
 <img width="960" alt="image" src="https://github.com/IF3110-2023-02-42/SPA/assets/89376200/aceca188-623d-4cd2-9046-b80de55722d4">
 
 ## Pembagian Tugas
-Frontend Halaman Login: 13521106
-Backend Halaman Login: 13521106
-Frontend Halaman Home: 13521066
-Backend Halaman Home: 13521066
-Frontend Halaman Discussion View: 13521051
-Backend Halaman Discussion View: 13521051
-Frontend Halaman Exercise: 13521051
-Backend Halaman Exercise: 13521051
-Frontend Halaman Exercise Admin: 13521051
-Backend Halaman Exercise Admin: 13521051
-Frontend Halaman Verification: 13521066
-Backend Halaman Verification: 13521066
+- Frontend Halaman Login: 13521106
+- Backend Halaman Login: 13521106
+- Frontend Halaman Home: 13521066
+- Backend Halaman Home: 13521066
+- Frontend Halaman Discussion View: 13521051
+- Backend Halaman Discussion View: 13521051
+- Frontend Halaman Exercise: 13521051
+- Backend Halaman Exercise: 13521051
+- Frontend Halaman Exercise Admin: 13521051
+- Backend Halaman Exercise Admin: 13521051
+- Frontend Halaman Verification: 13521066
+- Backend Halaman Verification: 13521066
