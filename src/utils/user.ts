@@ -12,4 +12,5 @@ export async function getUserStatus(ID_Pengguna: string | null){
         console.log(response.data);
         return null;
     }
+    // return sessionStorage.getItem("verificationStatus") === "accepted";
 }

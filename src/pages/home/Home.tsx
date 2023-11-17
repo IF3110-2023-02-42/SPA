@@ -16,7 +16,7 @@ const Home = () => {
   const [discussionCards, setDiscussionCards] = useState<Discussion[]>([]);
   const [verified, setVerified] = useState<boolean | null>();
   const navigate = useNavigate();
-  
+
   async function getDiscussionsDataPage(){
     if (!sessionStorage.getItem("accessToken")){
       navigate("/login");
@@ -58,6 +58,7 @@ const Home = () => {
 
   useEffect(()=>{
     getDiscussionsDataPage();
+    getMaxPage();
   }, [discussionCards])
 
   function toggleModal(){
