@@ -3,6 +3,7 @@ import api from "../../utils/api";
 
 import CardHistoryExercise from "../../components/CardHistoryExercise";
 import NavbarLayout from "../../layout/NavbarLayout";
+import { getDecodedJwt } from "../../utils/jwt";
 
 type CardHistoryExerciseProps = {
   judul: string;
@@ -12,7 +13,7 @@ type CardHistoryExerciseProps = {
 };
 
 // dummy
-const ID_Pengguna = 1;
+const ID_Pengguna = 2;
 // dummy
 
 const ExHistoryList = () => {
@@ -26,12 +27,13 @@ const ExHistoryList = () => {
           params: {
             ID_Pengguna: ID_Pengguna,
           },
-          headers : {
-            accessToken : sessionStorage.getItem("accessToken"),
+          headers: {
+            accessToken: sessionStorage.getItem("accessToken"),
           },
         });
 
         setExerciseList(response.data.data);
+        console.log("first", getDecodedJwt());
       } catch (error) {
         console.log("Error fetching data:", error);
         setExerciseList([]);
