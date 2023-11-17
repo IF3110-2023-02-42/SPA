@@ -1,16 +1,25 @@
 import toast from "react-hot-toast";
 import loginCharacter from "../../assets/3d-login.webp";
 import loginBg from "../../assets/login-bg.png";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
-import { AxiosError } from "axios";
+import { getDecodedJwt } from "../../utils/jwt";
 
 const Login = () => {
   const [data, setData] = useState({
     username: "",
     password: "",
   });
+
+  const navigate = useNavigate();
+  const decodedJwt = getDecodedJwt();
+  useEffect(() => {
+    if (decodedJwt) {
+      toast.error("Already logged in");
+      navigate("/");
+    }
+  }, [decodedJwt, navigate]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -19,8 +28,6 @@ const Login = () => {
       [id]: value,
     }));
   };
-
-  const navigate = useNavigate();
 
   const submitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

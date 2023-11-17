@@ -24,10 +24,6 @@ export const router = () =>
           element: <Login />,
         },
         {
-          path: "/register",
-          element: <Register />,
-        },
-        {
           path: "/verification",
           element: <Verification />,
         },

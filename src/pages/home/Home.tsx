@@ -8,6 +8,7 @@ import NavbarLayout from "../../layout/NavbarLayout";
 import DiscussionCard from "../../components/CardDiscussion";
 import toast from "react-hot-toast";
 import { getUserStatus } from "../../utils/user";
+import { getDecodedJwt } from "../../utils/jwt";
 
 const Home = () => {
   const [modal, setModal] = useState(false);
@@ -65,8 +66,13 @@ const Home = () => {
   }
 
   async function getStatus() {
-    const status = await getUserStatus(sessionStorage.getItem("ID_Pengguna"));
-    setVerified(status);
+    const decodedJwt = getDecodedJwt();
+    if (decodedJwt) {
+      const status = await getUserStatus(decodedJwt.ID_Pengguna);
+      setVerified(status);
+    } else {
+      setVerified(false);
+    }
   }
 
   useEffect(() => {

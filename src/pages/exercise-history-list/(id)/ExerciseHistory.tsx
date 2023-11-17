@@ -4,6 +4,7 @@ import NavbarLayout from "../../../layout/NavbarLayout";
 import CardQuestionAnswered from "../../../components/CardQuestionAnswered";
 import api from "../../../utils/api";
 import toast from "react-hot-toast";
+import { getDecodedJwt } from "../../../utils/jwt";
 
 type CardQuestionAnsweredProps = {
   ID_Soal: string;
@@ -22,26 +23,22 @@ type ExerciseHistoryData = {
   pembahasan: CardQuestionAnsweredProps[];
 };
 
-// dummy
-const ID_Pengguna = 1;
-// dummy
-
 const ExerciseHistory = () => {
   const { id } = useParams();
   const [exerciseHistoryData, setExerciseHistoryData] =
     useState<ExerciseHistoryData | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (ID_Pengguna: string) => {
       try {
         const response = await api.get("/exercise/getHistoryExerciseById", {
           params: {
-            ID_Pengguna: ID_Pengguna,
+            ID_Pengguna,
             ID_Latsol: id,
           },
-          headers : {
-            accessToken : sessionStorage.getItem("accessToken"),
-          }
+          headers: {
+            accessToken: sessionStorage.getItem("accessToken"),
+          },
         });
         console.log("response.data.data", response.data.data);
         setExerciseHistoryData(response.data.data);
@@ -51,7 +48,10 @@ const ExerciseHistory = () => {
       }
     };
 
-    fetchData();
+    const decodedJwt = getDecodedJwt();
+    if (decodedJwt) {
+      fetchData(decodedJwt.ID_Pengguna);
+    }
   }, [id]);
 
   if (exerciseHistoryData === null) {

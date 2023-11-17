@@ -21,11 +21,11 @@ const ExHistoryList = () => {
     useState<CardHistoryExerciseProps[]>();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (ID_Pengguna: string) => {
       try {
         const response = await api.get("/exercise/getHistoryExerciseListById", {
           params: {
-            ID_Pengguna: ID_Pengguna,
+            ID_Pengguna,
           },
           headers: {
             accessToken: sessionStorage.getItem("accessToken"),
@@ -33,14 +33,17 @@ const ExHistoryList = () => {
         });
 
         setExerciseList(response.data.data);
-        console.log("first", getDecodedJwt());
       } catch (error) {
         console.log("Error fetching data:", error);
         setExerciseList([]);
       }
     };
 
-    fetchData();
+    const decodedJwt = getDecodedJwt();
+    if (decodedJwt) {
+      console.log(decodedJwt.ID_Pengguna);
+      fetchData(decodedJwt.ID_Pengguna);
+    }
   }, []);
 
   return (

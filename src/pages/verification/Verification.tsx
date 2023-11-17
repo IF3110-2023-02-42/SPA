@@ -4,6 +4,8 @@ import VerificationCard from "../../components/CardVerification";
 import { useEffect } from "react";
 import api, { headers } from "../../utils/api";
 import toast from "react-hot-toast";
+import { getDecodedJwt } from "../../utils/jwt";
+import { useNavigate } from "react-router-dom";
 interface Verification {
   ID_Pengguna: string;
   nama: string;
@@ -16,6 +18,7 @@ export default function Verification() {
   const [verificationCards, setVerificationCards] = useState<Verification[]>(
     []
   );
+  const navigate = useNavigate();
 
   async function changeStatusToDatabase(id: string, newStatus: string) {
     // Commit to REST
@@ -50,7 +53,12 @@ export default function Verification() {
   }
 
   useEffect(() => {
-    getVerificationsData();
+    const decodedJwt = getDecodedJwt();
+    if (decodedJwt && decodedJwt.role === "admin") {
+      getVerificationsData();
+    } else {
+      navigate("/");
+    }
   }, []);
   useEffect(() => {
     console.log("first", verificationCards);
